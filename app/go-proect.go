@@ -6,8 +6,15 @@ import (
 	"go-project/pkg/tools"
 )
 
-// CreateProject 创建p project。。。
-func CreateProject() {
+type project interface {
+	dirs() string
+	files() string
+	careteFile()
+	careteDir()
+}
+
+// CreateProject 创建project
+func CreateProject(name, path string) {
 	defer func() {
 		if e := recover(); e != nil {
 			log := tools.Trace("%v", e.(error).Error())
@@ -16,8 +23,8 @@ func CreateProject() {
 	}()
 
 	p := &create.Create{
-		Name: "test",
-		Path: "testpath",
+		Name: name,
+		Path: path,
 	}
 
 	p.Dir("app")
