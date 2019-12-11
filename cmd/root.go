@@ -2,6 +2,7 @@ package cmd
 
 import (
 	"fmt"
+	"go-project/app"
 	"os"
 
 	"github.com/spf13/cobra"
@@ -17,9 +18,9 @@ var rootCmd = &cobra.Command{
 	Use:   "go-project",
 	Short: "用创建go项目需要的文件",
 	Long:  `用于创建go项目的一些文件如Dockerfile,目录结构等。。。`,
-	// Uncomment the following line if your bare application
-	// has an action associated with it:
-	//	Run: func(cmd *cobra.Command, args []string) { },
+	Run: func(cmd *cobra.Command, args []string) {
+		app.CreateProject()
+	},
 }
 
 // Execute adds all child commands to the root command and sets flags appropriately.
