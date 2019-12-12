@@ -1,12 +1,13 @@
 package app
 
 import (
-	"fmt"
 	"go-project/pkg/create"
 	"go-project/pkg/tools"
+	"log"
 )
 
 type project interface {
+	addDir([]string)
 	dirs() string
 	files() string
 	careteFile()
@@ -17,8 +18,8 @@ type project interface {
 func CreateProject(name, path string) {
 	defer func() {
 		if e := recover(); e != nil {
-			log := tools.Trace("%v", e.(error).Error())
-			fmt.Println(log)
+			log.Println(tools.Trace("%v", e.(error).Error()))
+
 		}
 	}()
 
