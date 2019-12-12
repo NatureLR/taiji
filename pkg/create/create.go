@@ -28,7 +28,7 @@ func (c *Create) Gitignore() {
 
 // Makefile  创建makefile
 func (c *Create) Makefile() {
-	c.cf("Makefile", "....")
+	c.cf("Dockerfile", tl.Parsecontent(tl.Makefile, c.Name))
 }
 
 // Dockerfile 创建dockerfile
