@@ -6,13 +6,13 @@ import (
 	"log"
 )
 
-type project interface {
-	addDir([]string)
-	dirs() string
-	files() string
-	careteFile()
-	careteDir()
-}
+//type project interface {
+//	addDir([]string)
+//	dirs() string
+//	files() string
+//	careteFile()
+//	careteDir()
+//}
 
 // CreateProject 创建project
 func CreateProject(name, path string) {
@@ -33,4 +33,5 @@ func CreateProject(name, path string) {
 	p.Gitignore()
 	p.Makefile()
 	p.Dockerfile()
+	p.K8s()
 }

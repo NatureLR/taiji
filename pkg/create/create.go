@@ -36,6 +36,11 @@ func (c *Create) Dockerfile() {
 	c.cf("Dockerfile", tl.Parsecontent(tl.Dockerfile, c.Name))
 }
 
+// K8s 创建k8s
+func (c *Create) K8s() {
+	c.cf("k8s.yaml", tl.Parsecontent(tl.K8s, c.Name))
+}
+
 func (c *Create) cf(filetype, content string) {
 	fp := filepath.Join(c.Path, c.Name, filetype)
 	log.Println("创建文件:", fp)
