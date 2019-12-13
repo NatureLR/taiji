@@ -6,32 +6,28 @@ import (
 	"log"
 )
 
-//type project interface {
-//	addDir([]string)
-//	dirs() string
-//	files() string
-//	careteFile()
-//	careteDir()
-//}
+type project interface {
+	AddDir([]string)
+	Create()
+}
 
-// CreateProject 创建project
-func CreateProject(name, path string) {
+func creteProject(p project) {
+	p.AddDir([]string{"app", "pkg"})
+	p.Create()
+
+}
+
+// GoProject 创建project
+func GoProject(name, path string) {
 	defer func() {
 		if e := recover(); e != nil {
 			log.Println(tools.Trace("%v", e.(error).Error()))
 
 		}
 	}()
-
 	p := &create.Create{
 		Name: name,
 		Path: path,
 	}
-
-	p.Dir("app")
-	p.Dir("pkg")
-	p.Gitignore()
-	p.Makefile()
-	p.Dockerfile()
-	p.K8s()
+	creteProject(p)
 }

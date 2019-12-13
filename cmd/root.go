@@ -18,7 +18,7 @@ var rootCmd = &cobra.Command{
 	Short: "用创建go项目需要的文件",
 	Long:  `用于创建go项目的一些文件如Dockerfile,目录结构等`,
 	Run: func(cmd *cobra.Command, args []string) {
-		app.CreateProject(projectName, projectPath)
+		app.GoProject(projectName, projectPath)
 	},
 }
 
