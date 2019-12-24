@@ -1,6 +1,6 @@
 # 编译
 
-FROM golang:latest as build
+FROM golang:1.13.5-alpine3.10 as build
 
 WORKDIR /go/src/go-project/
 
@@ -10,8 +10,8 @@ RUN pwd && ls
 
 # 国内使用的goproxy
 #RUN export GOPROXY=https://goproxy.cn
-RUN  CGO_ENABLED=0 GOOS=linux go build -o go-project -mod=vendor .
-#RUN  CGO_ENABLED=0 GOOS=linux go build -o go-project .
+
+RUN  go build -o go-project -mod=vendor .
 
 # 运行
 
