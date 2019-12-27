@@ -2,9 +2,9 @@ package cmd
 
 import (
 	"fmt"
-	"go-project/app"
 	"os"
 
+	"github.com/NatureLingRan/go-project/app"
 	"github.com/spf13/cobra"
 )
 

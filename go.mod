@@ -1,4 +1,4 @@
-module go-project
+module github.com/NatureLingRan/go-project
 
 go 1.13
 

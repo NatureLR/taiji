@@ -1,12 +1,13 @@
 package create
 
 import (
-	tl "go-project/pkg/template"
-	"go-project/pkg/tools"
 	"log"
 	"os"
 	"path/filepath"
 	"strings"
+
+	tl "github.com/NatureLingRan/go-project/pkg/template"
+	"github.com/NatureLingRan/go-project/pkg/tools"
 )
 
 // Create 需要创建的对象

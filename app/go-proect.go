@@ -1,9 +1,10 @@
 package app
 
 import (
-	"go-project/pkg/create"
-	"go-project/pkg/tools"
 	"log"
+
+	"github.com/NatureLingRan/go-project/pkg/create"
+	"github.com/NatureLingRan/go-project/pkg/tools"
 )
 
 type project interface {
