@@ -10,6 +10,4 @@
 
 ## 安装
 
-     git clone https://github.com/zxz2333/go-project.git
-
-     cd go-project && go build
+     go get github.com/NatureLingRan/go-project
