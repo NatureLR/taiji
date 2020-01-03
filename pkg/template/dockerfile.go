@@ -25,8 +25,7 @@ WORKDIR /root/
 # 调整时区为北京时间
 #RUN sed -i 's/dl-cdn.alpinelinux.org/mirrors.aliyun.com/g' /etc/apk/repositories && \
 #    apk add --no-cache ca-certificates tzdata  && \
-#    ln -s /usr/share/zoneinfo/Asia/Shanghai /etc/localtime && \
-#    apk del tzdata
+#    ln -s /usr/share/zoneinfo/Asia/Shanghai /etc/localtime
 
 COPY --from=build /build/{{.project}} .
 
