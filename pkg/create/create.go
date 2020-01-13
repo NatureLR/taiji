@@ -37,6 +37,12 @@ func (c *Create) K8s() {
 	c.File("k8s.yaml", c.Parsecontent(tl.K8s, c.Name))
 }
 
+// VersionGo 创建version.go文件
+func (c *Create) VersionGo() {
+	c.Dir("version")
+	c.File("version/version.go", c.Parsecontent(tl.Version, c.Name))
+}
+
 // File 创建文件类型的方法
 func (c *Create) File(filetype, content string) {
 	fp := filepath.Join(c.Path, c.Name, filetype)
@@ -73,4 +79,5 @@ func (c *Create) Create() {
 	c.K8s()
 	c.Makefile()
 	c.Gitignore()
+	c.VersionGo()
 }

@@ -5,6 +5,7 @@ import (
 	"os"
 
 	"github.com/NatureLingRan/go-project/app"
+	"github.com/NatureLingRan/go-project/version"
 	"github.com/spf13/cobra"
 )
 
@@ -20,6 +21,7 @@ var rootCmd = &cobra.Command{
 	Run: func(cmd *cobra.Command, args []string) {
 		app.GoProject(projectName, projectPath)
 	},
+	Version: version.Print(),
 }
 
 // Execute adds all child commands to the root command and sets flags appropriately.
