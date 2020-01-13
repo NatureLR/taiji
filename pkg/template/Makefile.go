@@ -2,15 +2,15 @@ package template
 
 // Makefile 模板
 const Makefile = `
-project = $$(go list)
+path = $$(go list)
 
-version = -X '$(project)/version.Version=$$(git tag --sort=taggerdate |tail -1)'
+version = -X '$(path)/version.Version=$$(git tag --sort=taggerdate |tail -1)'
 
-goversion = -X '$(project)/version.GoVersion=$$(go version | awk '{printf($$3)}')'
+goversion = -X '$(path)/version.GoVersion=$$(go version | awk '{printf($$3)}')'
 
-gitcommit = -X '$(project)/version.GitCommit=$$(git rev-parse HEAD)'
+gitcommit = -X '$(path)/version.GitCommit=$$(git rev-parse HEAD)'
 
-built = -X '$(project)/version.Built=$$(date "+%Y-%m-%d %H:%M:%S")'
+built = -X '$(path)/version.Built=$$(date "+%Y-%m-%d %H:%M:%S")'
 
 ldflag = "-s -w $(version) $(goversion) $(gitcommit) $(built)"
 
