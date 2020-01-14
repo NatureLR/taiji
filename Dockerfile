@@ -1,6 +1,6 @@
 # 编译
 
-FROM golang:1.13.5-alpine3.10 as build
+FROM golang:1.13.6 as build
 
 WORKDIR /go/src/go-project/
 
@@ -11,7 +11,7 @@ RUN pwd && ls
 # 国内使用的goproxy
 #RUN export GOPROXY=https://goproxy.cn
 
-RUN  go build -o go-project -mod=vendor .
+RUN  make build_in_docker
 
 # 运行
 
