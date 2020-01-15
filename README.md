@@ -1,13 +1,23 @@
 # GO-PROJECT
 
-    一个创建go项目所需要的文件目录的程序
+    一个创建GO项目所需要的文件目录的程序,目前可以创建makefile,dockerfile,.gitignore
 
-## 使用方法
+文件或目录|说明|实现程度
+-|-|-
+makefile  |用于编译的脚本  |实现了go各大部分平台的交叉编译,docker,以及去符号版本注入      |
+dockerfile|编译为容器的文件 |编译镜像使用golang的完整版镜像,运行使用`alpine`镜像以减小体积|
+.gitignore|让git忽略的文件 |忽略项目本身编译的二进制文件                              |
+k8s.yaml  |k8s资源文件    |程序的Deployment,和service,镜像地址需要自己填写            |
+version   |版本相关的代码  |通过命令在编译的时候注入版本信息,已实现编译时间;commit版本号等 |
+app       |调度相关的代码  |-                                                     |
+pkg       |库代码         |-                                                     |
 
+## 安装使用
+
+    go install github.com/NatureLingRan/go-project
     ./go-project init  --name  <项目名字>  --path <项目路径>
 
-    默认路径在当前目录
+## TODO
 
-## 安装
-
-     go get github.com/NatureLingRan/go-project
+* go安装以及初始化
+* cobra安装以及初始化
