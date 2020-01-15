@@ -34,5 +34,4 @@ COPY --from=build /build/{{.project}} .
 #CMD ["./{{.project}}"]
 
 ENTRYPOINT ["./{{.project}}"]
-
 `

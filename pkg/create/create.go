@@ -43,10 +43,15 @@ func (c *Create) VersionGo() {
 	c.File("version/version.go", c.Parsecontent(tl.Version, c.Name))
 }
 
+// Readme 创建vReadme.md文件
+func (c *Create) Readme() {
+	c.File("README.md", c.Parsecontent(tl.Readme, c.Name))
+}
+
 // File 创建文件类型的方法
 func (c *Create) File(filetype, content string) {
 	fp := filepath.Join(c.Path, c.Name, filetype)
-	log.Println("创建文件:", fp)
+	log.Println("创建文件:", fp)
 	f, err := os.Create(fp)
 	tools.CheckErr(err)
 	_, err = f.WriteString(content)
@@ -76,8 +81,9 @@ func (c *Create) Create() {
 		c.Dir(d)
 	}
 	c.Dockerfile()
+	c.VersionGo()
 	c.K8s()
 	c.Makefile()
 	c.Gitignore()
-	c.VersionGo()
+	c.Readme()
 }
