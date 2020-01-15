@@ -43,9 +43,14 @@ func (c *Create) VersionGo() {
 	c.File("version/version.go", c.Parsecontent(tl.Version, c.Name))
 }
 
-// Readme 创建vReadme.md文件
+// Readme 创建Readme.md文件
 func (c *Create) Readme() {
 	c.File("README.md", c.Parsecontent(tl.Readme, c.Name))
+}
+
+// License 创建License文件
+func (c *Create) License() {
+	c.File("LICENSE", tl.License)
 }
 
 // File 创建文件类型的方法
@@ -86,4 +91,5 @@ func (c *Create) Create() {
 	c.Makefile()
 	c.Gitignore()
 	c.Readme()
+	c.License()
 }
