@@ -16,7 +16,7 @@ endif
 
 path = $$(cat go.mod |grep module |cut -b 8-))
 
-version=  -X '$(path)/version.Version=$(v)'
+version =  -X '$(path)/version.Version=$(v)'
 
 goversion = -X '$(path)/version.GoVersion=$$(go version | awk '{printf($$3)}')'
 
@@ -26,11 +26,13 @@ built = -X '$(path)/version.Built=$$(date "+%Y-%m-%d %H:%M:%S")'
 
 ldflag = "-s -w $(version) $(goversion) $(gitcommit) $(built)"
 
+build = go build -ldflags $(ldflag) -mod=vendor .
+
 # 编译为当前系统的二进制文件
 .PHONY: build
 build: 
 
-	go build -ldflags $(ldflag)  -mod=vendor .
+	$(build)
 	
 # 安装二进制文件到系统path
 .PHONY: install
@@ -47,23 +49,23 @@ docker:
 # 在容器中使用Makefile编译容器
 build_in_docker:
 
-	CGO_ENABLED=0 GOOS=linux go build -ldflags $(ldflag) -x -mod=vendor .
+	CGO_ENABLED=0 GOOS=linux $(build)
 
 # 交叉编译为windows的二进制文件
 .PHONY: windows
 windows:
 
-	GOOS=windows go build -ldflags $(ldflag) -x -mod=vendor .
+	GOOS=windows $(build)
 
 # 交叉编译为苹果osx的二进制文件
 .PHONY: darwin
 darwin:
 
-	GOOS=darwin go build -ldflags $(ldflag) -x -mod=vendor .
+	GOOS=darwin $(build)
 
 # 交叉编译为arm的linux环境（树莓派等环境）二进制文件
 .PHONY: arm
 arm:
 
-	GOARCH=arm GOARM=7 GOOS=linux go build -ldflags $(ldflag) -x -mod=vendor .
+	GOARCH=arm GOARM=7 GOOS=linux $(build)
 `

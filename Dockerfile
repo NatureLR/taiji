@@ -6,8 +6,6 @@ WORKDIR /go/src/go-project/
 
 COPY .  .
 
-RUN pwd && ls
-
 # 国内使用的goproxy
 #RUN export GOPROXY=https://goproxy.cn
 
