@@ -14,7 +14,7 @@ v = $$(git tag --sort=taggerdate |tail -1)
 
 endif
 
-path = $$(go list)
+path = $$(cat go.mod |grep module |cut -b 8-))
 
 version=  -X '$(path)/version.Version=$(v)'
 
