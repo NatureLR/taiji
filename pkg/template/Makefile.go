@@ -14,7 +14,7 @@ v = $$(git tag --sort=taggerdate |tail -1)
 
 endif
 
-path = $$(cat go.mod |grep module |cut -b 8-))
+path = $$(cat go.mod |grep module |cut -b 8-)
 
 version =  -X '$(path)/version.Version=$(v)'
 
@@ -33,12 +33,24 @@ build = go build -ldflags $(ldflag) -mod=vendor .
 build: 
 
 	$(build)
+
+# 直接运行不编译
+.PHONY: run
+run:
 	
+	go run .	
+
 # 安装二进制文件到系统path
 .PHONY: install
 install:
 
 	chmod +x {{.project}} && mv {{.project}} /usr/local/bin
+
+# 清理
+.PHONY: clean
+clean:
+	
+	rm  -rf {{.project}}	
 
 # 编译为docker镜像
 .PHONY: docker
@@ -47,6 +59,7 @@ docker:
 	docker build -t {{.project}}:latest -f Dockerfile .
 
 # 在容器中使用Makefile编译容器
+.PHONY: build_in_docker
 build_in_docker:
 
 	CGO_ENABLED=0 GOOS=linux $(build)

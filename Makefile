@@ -1,3 +1,4 @@
+
 # 判断当前commit是否有tag如果有tag则显示tag没有则显示 commit次数.哈希
 
 v = $$(echo "$$(git log --oneline |wc -l).$$(git log -n1 --pretty=format:%h)" | sed 's/ //g')
@@ -29,12 +30,24 @@ build = go build -ldflags $(ldflag) -mod=vendor .
 build: 
 
 	$(build)
+
+# 直接运行不编译
+.PHONY: run
+run:
 	
+	go run .	
+
 # 安装二进制文件到系统path
 .PHONY: install
 install:
 
 	chmod +x go-project && mv go-project /usr/local/bin
+
+# 清理
+.PHONY: clean
+clean:
+	
+	rm  -rf go-project	
 
 # 编译为docker镜像
 .PHONY: docker
@@ -46,7 +59,7 @@ docker:
 .PHONY: build_in_docker
 build_in_docker:
 
-	 CGO_ENABLED=0 GOOS=linux $(build)
+	CGO_ENABLED=0 GOOS=linux $(build)
 
 # 交叉编译为windows的二进制文件
 .PHONY: windows
