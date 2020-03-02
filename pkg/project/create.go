@@ -70,7 +70,7 @@ func (p *Project) File(filetype, content string) {
 func (p *Project) Dir(dirname string) {
 	fp := filepath.Join(p.Path, p.Name, dirname)
 	if p.Path == "." {
-		fp = p.Path
+		fp = dirname
 	}
 	log.Println("创建文件夹:", fp)
 	tools.CheckErr(os.MkdirAll(fp, 0744))
