@@ -4,7 +4,7 @@ package template
 const Dockerfile = `
 # 编译
 
-FROM golang:1.13.5-alpine3.10 as build
+FROM golang:1.14 as build
 
 WORKDIR /build
 
