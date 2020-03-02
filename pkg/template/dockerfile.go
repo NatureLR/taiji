@@ -13,8 +13,7 @@ COPY .  .
 # 国内使用的goproxy
 #RUN export GOPROXY=https://goproxy.cn
 
-RUN go build -o {{.project}} -ldflags "-s -w" -mod=vendor .
-#RUN  CGO_ENABLED=0 GOOS=linux go build -o {{.project}} .
+RUN make build_in_docker
 
 # 运行
 
