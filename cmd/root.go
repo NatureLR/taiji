@@ -8,11 +8,6 @@ import (
 	"github.com/spf13/cobra"
 )
 
-var (
-	projectPath string
-	projectName string
-)
-
 var rootCmd = &cobra.Command{
 	Use:     "go-project",
 	Short:   "用创建go项目需要的文件",
@@ -27,11 +22,4 @@ func Execute() {
 		fmt.Println(err)
 		os.Exit(1)
 	}
-}
-
-func init() {
-
-	rootCmd.PersistentFlags().StringVar(&projectName, "name", "", "项目名字")
-	rootCmd.PersistentFlags().StringVar(&projectPath, "path", ".", "项目创建的路径")
-
 }

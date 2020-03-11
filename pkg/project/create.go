@@ -19,7 +19,7 @@ type Project struct {
 
 // Gitignore 创建.gitignore文件
 func (p *Project) Gitignore() {
-	p.File(".gitignore", fmt.Sprintln(p.Name, ".vscode"))
+	p.File(".gitignore", p.Parsecontent(tl.Gitignore, p.Name))
 }
 
 // Makefile  创建makefile

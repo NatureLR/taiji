@@ -5,6 +5,10 @@ import (
 	"github.com/spf13/cobra"
 )
 
+var (
+	projectPath string
+	projectName string
+)
 var initCmd = &cobra.Command{
 	Use:   "init",
 	Short: "初始化go项目",
