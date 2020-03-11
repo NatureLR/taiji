@@ -9,6 +9,7 @@ dockerfile|编译为容器的文件 |编译镜像使用golang的完整版镜像,
 .gitignore|让git忽略的文件 |忽略项目本身编译的二进制文件                              |
 k8s.yaml  |k8s资源文件    |程序的Deployment,和service,镜像地址需要自己填写            |
 version   |版本相关的代码  |通过命令在编译的时候注入版本信息,已实现编译时间;commit版本号等 |
+cmd       |命令行参数代码  |croba的命令行代码                                       |
 pkg       |库代码         |-                                                     |
 
 ## 安装使用
