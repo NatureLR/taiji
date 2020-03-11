@@ -17,11 +17,6 @@ pkg       |库代码         |-                                                 
     cd /<项目目录>
     go-project init
 
-## TODO
-
-* go安装以及初始化
-* cobra安装以及初始化
-
 ## 注意
 
     非go mod下版本无法注入

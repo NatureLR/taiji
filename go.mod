@@ -1,5 +1,8 @@
 module github.com/NatureLingRan/go-project
 
-go 1.13
+go 1.14
 
-require github.com/spf13/cobra v0.0.5
+require (
+	github.com/spf13/cobra v0.0.5
+	github.com/spf13/viper v1.3.2 // indirect
+)
