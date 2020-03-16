@@ -23,7 +23,7 @@ import (
 	"path/filepath"
 	"{{.importPath}}/version"
 	"strings"
-
+	homedir "github.com/mitchellh/go-homedir"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
 )
@@ -65,8 +65,17 @@ func initConfig() {
 		// 从flag读取文件
 		viper.SetConfigFile(cfgFile)
 	} else {
+		// 寻找home目录
+		home, err := homedir.Dir()
+		if err != nil {
+			fmt.Println(err)
+			os.Exit(1)
+		}
+
+
 		viper.SetConfigName("config")
 		viper.SetConfigType("yaml")
+		viper.AddConfigPath(home)                                        //家目录
 		viper.AddConfigPath(".")                                         //当前目录
 		viper.AddConfigPath("./config")                                  //当前目录下的config目录
 		viper.AddConfigPath(fmt.Sprint(filepath.Join("/", "etc", self))) //etc目录下程序的名字下的config.yaml

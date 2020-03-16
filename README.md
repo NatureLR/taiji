@@ -15,9 +15,9 @@ pkg       |库代码         |-                                                 
 ## 安装使用
 
     go install github.com/NatureLingRan/go-project
-    cd /<项目目录>
+    cd <项目目录>
     go-project init
 
-## 注意
+## 命令行&配置文件
 
-    非go mod下版本无法注入
+* 命令使用[cobra](https://github.com/spf13/cobra)，配置使用[viper](https://github.com/spf13/viper)，默认会读取程序的根目录，程序下的config目录，/etc/<程序的名字>目录，home目录；中的config.yaml
