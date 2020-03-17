@@ -2,8 +2,7 @@ package template
 
 // Dockerfile 模版
 const Dockerfile = `
-# 编译
-
+# 编译镜像
 FROM golang:1.14 as build
 
 WORKDIR /build
@@ -15,8 +14,7 @@ COPY .  .
 
 RUN make build_in_docker
 
-# 运行
-
+# 运行镜像
 FROM alpine:latest
 
 WORKDIR /root/
@@ -30,7 +28,7 @@ COPY --from=build /build/{{.project}} .
 
 #EXPOSE <port>
 
-#CMD ["./{{.project}}"]
+CMD ["./{{.project}}"]
 
-ENTRYPOINT ["./{{.project}}"]
+#ENTRYPOINT ["./{{.project}}"]
 `
