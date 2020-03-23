@@ -1,94 +1,55 @@
 package project
 
 import (
-	"fmt"
 	"log"
 	"os"
 	"path/filepath"
 	"strings"
 
+	"github.com/NatureLingRan/go-project/pkg/template"
 	"github.com/NatureLingRan/go-project/pkg/tools"
+	"github.com/spf13/cobra"
 )
 
-// Project 需要创建的对象
-type Project struct {
-	Name string
-	Path string
+// Init  如果没有指定创建文件就创建所有文件，否则就创建指定的文件
+func Init(cmd *cobra.Command, args []string) {
+
+	project := filepath.Base(os.Getenv("PWD"))
+
+	if len(args) == 0 {
+		for n, t := range template.GetDefaul() {
+			c := parsecontent(t.Content, project)
+			Create(t.Path, n, c)
+		}
+		return
+	}
+
+	t := template.GetDefaul()[args[0]]
+	content := parsecontent(t.Content, t.Path)
+	Create(t.Path, args[0], content)
 }
 
-// File 创建文件类型的方法
-func (p *Project) File(filetype, content string) {
-	fp := filepath.Join(p.Path, p.Name, filetype)
-	if p.Path == "." {
-		fp = filepath.Join(p.Path, filetype)
+// Create 创建
+func Create(path, name, content string) {
+	if path != "." {
+		log.Println("创建文件夹:", path)
+		tools.CheckErr(os.MkdirAll(path, 0744))
 	}
-	log.Println("创建文件:", fp)
-	f, err := os.Create(fp)
+	log.Println("创建文件:", name)
+	f, err := os.Create(filepath.Join(path, name))
 	tools.CheckErr(err)
 	_, err = f.WriteString(content)
 	tools.CheckErr(err)
 }
 
-// Dir 创建文件夹
-func (p *Project) Dir(dirname string) {
-	fp := filepath.Join(p.Path, p.Name, dirname)
-	if p.Path == "." {
-		fp = dirname
-	}
-	log.Println("创建文件夹:", fp)
-	tools.CheckErr(os.MkdirAll(fp, 0744))
+func importPath() string {
+	path := strings.ReplaceAll(os.Getenv("PWD"), os.Getenv("GOPATH")+"/src/", "")
+	return strings.Replace(path, "\\", "/", -1) //将\替换成/
 }
 
-// Parsecontent 创建模板文件的各个模板
-func (p *Project) Parsecontent(content, project string) string {
-	return strings.ReplaceAll(content, `{{.project}}`, project)
-}
-
-// New 创建对象
-func New(name, path string) *Project {
-	return &Project{
-		Name: name,
-		Path: path,
-	}
-}
-
-// Create 创建一些文件和目录
-func (p *Project) Create() {
-	p.Dir("pkg")
-	p.Dockerfile()
-	p.VersionGo()
-	p.K8s()
-	p.Makefile()
-	p.Gitignore()
-	p.Readme()
-	p.License()
-	p.Corba()
-}
-
-// Update 更新创建的文件
-func (p *Project) Update(args []string) {
-	if len(args) == 0 {
-		p.Create()
-		return
-	}
-	arg := strings.ToLower(args[0])
-
-	switch arg {
-	case "makefile":
-		p.Makefile()
-	case "k8s":
-		p.K8s()
-	case "version":
-		p.VersionGo()
-	case "dockerfile":
-		p.Dockerfile()
-	case "license":
-		p.License()
-	case "readme":
-		p.Readme()
-	case "gitignore":
-		p.Gitignore()
-	default:
-		fmt.Println("不支持的文件类型")
-	}
+func parsecontent(content, project string) string {
+	c := strings.ReplaceAll(content, `{{.project}}`, project)
+	c = strings.ReplaceAll(c, `{{.importPath}}`, importPath())
+	c = strings.ReplaceAll(c, `{{.importPath}}`, importPath())
+	return c
 }

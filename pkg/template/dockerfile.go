@@ -1,5 +1,9 @@
 package template
 
+func init() {
+	DefaultPool.add("Dockerfile", Dockerfile, "")
+}
+
 // Dockerfile 模版
 const Dockerfile = `
 # 编译镜像

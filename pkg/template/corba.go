@@ -1,5 +1,10 @@
 package template
 
+func init() {
+	DefaultPool.add("main.go", MainGo, "")
+	DefaultPool.add("root.go", RootGo, "cmd")
+}
+
 // MainGo main.go模板
 const MainGo = `
 package main

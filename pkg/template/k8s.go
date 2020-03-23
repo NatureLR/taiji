@@ -1,5 +1,9 @@
 package template
 
+func init() {
+	DefaultPool.add("k8s.yaml", K8s, "")
+}
+
 // K8s 文件模板
 const K8s = `
 apiVersion: apps/v1

@@ -1,5 +1,9 @@
 package template
 
+func init() {
+	DefaultPool.add("version.go", Version, "version")
+}
+
 // Version version.go模板
 const Version = `
 package version

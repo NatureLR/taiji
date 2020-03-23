@@ -1,5 +1,9 @@
 package template
 
+func init() {
+	DefaultPool.add("Makefile", Makefile, "")
+}
+
 // Makefile 模板
 const Makefile = `
 # 判断当前commit是否有tag如果有tag则显示tag没有则显示 commit次数.哈希

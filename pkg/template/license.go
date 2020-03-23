@@ -1,5 +1,9 @@
 package template
 
+func init() {
+	DefaultPool.add("License", License, "")
+}
+
 // License apache协议
 const License = `
                                  Apache License
