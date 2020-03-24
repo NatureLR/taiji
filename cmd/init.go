@@ -15,5 +15,4 @@ var initCmd = &cobra.Command{
 
 func init() {
 	rootCmd.AddCommand(initCmd)
-	initCmd.PersistentFlags().StringVar(&projectName, "name", "", "项目名字")
 }
