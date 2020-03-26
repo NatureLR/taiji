@@ -22,6 +22,9 @@ func (p *Pool) add(name, tpl, path string) {
 	}
 }
 
+// Add 添加模板
+func (p *Pool) Add(name, tpl, path string) { p.add(name, tpl, path) }
+
 func (p *Pool) init() { p.Templates = make(map[string]*Template) }
 
 // Template  模板对象
