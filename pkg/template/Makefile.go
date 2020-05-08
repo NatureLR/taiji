@@ -14,7 +14,7 @@ tag = $(shell git log -n1 --pretty=format:%h |git tag --contains)
 
 ifneq ($(tag),)
 
-v = $$(git tag --sort=taggerdate |tail -1)
+v = $$(git tag --sort=committerdate |tail -1)
 
 endif
 
