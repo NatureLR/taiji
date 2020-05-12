@@ -14,7 +14,7 @@ WORKDIR /build
 COPY .  .
 
 # 国内使用的goproxy
-#RUN export GOPROXY=https://goproxy.cn
+#ENV GOPROXY=https://goproxy.cn
 
 RUN make build_in_docker
 
