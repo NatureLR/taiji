@@ -1,8 +1,8 @@
+
 package version
 
 import (
 	"fmt"
-	"strings"
 )
 
 var (
@@ -21,5 +21,5 @@ var (
 
 // Print 打印版本
 func Print() string {
-	return strings.Trim(fmt.Sprintf("%s GitCommit:%s GoVersion:%s Built:%s", Version, GitCommit, GoVersion, Built), "")
+	return fmt.Sprintf("%s GitCommit:%s GoVersion:%s Built:%s", Version, GitCommit, GoVersion, Built)
 }
