@@ -1,3 +1,4 @@
+
 # 编译镜像
 FROM golang:1.14-alpine as build
 
@@ -5,6 +6,7 @@ WORKDIR /build
 
 COPY .  .
 
+# 安装编译依赖
 RUN sed -i 's/dl-cdn.alpinelinux.org/mirrors.aliyun.com/g' /etc/apk/repositories && \
     apk add --no-cache ca-certificates tzdata  && \
     ln -s /usr/share/zoneinfo/Asia/Shanghai /etc/localtime && \

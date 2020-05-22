@@ -12,7 +12,7 @@ import (
 	"github.com/spf13/cobra"
 )
 
-// kind 创建的文件类型 如doackerfile
+// kind 创建的文件类型 如dockerfile
 // name 文件的名字
 // path 文件创建你的路径，当前目录为根路径
 // project 项目的名字
@@ -49,6 +49,12 @@ func Create(c CreateTpl, name, project string) {
 
 // Init  如果没有指定创建文件就创建所有文件，否则就创建指定的文件
 func Init(cmd *cobra.Command, args []string) {
+	defer func() {
+		if e := recover(); e != nil {
+			log.Fatal(e)
+		}
+	}()
+
 	project := filepath.Base(os.Getenv("PWD"))
 
 	if len(args) == 0 {

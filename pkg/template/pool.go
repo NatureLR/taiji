@@ -1,6 +1,7 @@
 package template
 
 import (
+	"errors"
 	"strings"
 )
 
@@ -46,7 +47,12 @@ var DefaultPool Pool
 func GetDefaul() map[string]*Template { return DefaultPool.Templates }
 
 // DefaulKind 获取默认所有的
-func DefaulKind(kind string) *Template { return DefaultPool.Templates[kind] }
+func DefaulKind(kind string) *Template {
+	if _, ok := DefaultPool.Templates[kind]; !ok {
+		panic(errors.New("不支持的类型"))
+	}
+	return DefaultPool.Templates[kind]
+}
 
 // AllKind 所有的某班类型
 func AllKind() string {
