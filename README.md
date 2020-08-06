@@ -22,7 +22,7 @@ pkg       |库代码         |-                |
 
 ### 命令行
 
-* 命令使用[cobra](https://github.com/spf13/cobra)详情可以查看官方文档,床架你的cmd文件夹即为`cobra`的命令入口
+* 命令使用[cobra](https://github.com/spf13/cobra)详情可以查看官方文档,创建的cmd文件夹即为`cobra`的命令入口
 
 ### 配置文件
 
@@ -39,8 +39,8 @@ pkg       |库代码         |-                |
 
 ### Dockerfile
 
-采用多阶编译,默认使用编译镜像使用`golang:latest`,因为需要需要使用一些git功能,运行镜像为`alpine:latest`,可自行替换私有仓库
-文件中有修改时区，以及镜像源替换为国内的命令
+采用多阶编译,默认使用编译镜像使用`golang:1.14-alpine`,运行镜像为`alpine:latest`,可自行替换私有仓库
+镜像中修改时区为国内，以及镜像源替换为国内的命令
 
 ### Makefile
 
