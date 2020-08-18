@@ -19,8 +19,8 @@ var rootCmd = &cobra.Command{
 	Version: version.Print(),
 }
 
-// Execute adds all child commands to the root command and sets flags appropriately.
-// This is called by main.main(). It only needs to happen once to the rootCmd.
+// Execute 将所有的子命令加入到根命令并设置适当的flag
+// 这是main.main()调用的,只调用一次
 func Execute() {
 	if err := rootCmd.Execute(); err != nil {
 		fmt.Println(err)
