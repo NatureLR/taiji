@@ -64,7 +64,8 @@ func Init(cmd *cobra.Command, args []string) {
 		return
 	}
 
-	kind := args[0]
-	t := tpl.DefaulKind(kind)
-	Create(t, kind, project)
+	for _, kind := range args {
+		t := tpl.DefaulKind(kind)
+		Create(t, kind, project)
+	}
 }
