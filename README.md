@@ -1,6 +1,6 @@
 # GO-PROJECT
 
-    一个创建GO项目所需要的文件目录的程序,目前可以创建makefile,dockerfile,.gitignore
+    一个创建GO项目所需要的文件目录的程序,如makefile,dockerfile,.gitignore等等
 
 文件或目录|说明|说明
 -|-|-
@@ -10,7 +10,6 @@ dockerfile|编译为容器的文件 |编译doker镜像    |
 k8s.yaml  |k8s资源文件    |k8s部署文件       |
 version   |版本相关的代码  |版本相关          |
 cmd       |命令行参数代码  |croba的命令行代码  |
-pkg       |库代码         |-                |
 
 ## 安装使用
 
