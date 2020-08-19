@@ -1,8 +1,8 @@
 package template
 
 func init() {
-	DefaultPool.add("main.go", MainGo, "")
-	DefaultPool.add("root.go", RootGo, "cmd")
+	DefaultPool.add("main.go", MainGo, "main.go")
+	DefaultPool.add("root.go", RootGo, "cmd/root.go")
 }
 
 // MainGo main.go模板

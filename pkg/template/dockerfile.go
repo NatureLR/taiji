@@ -1,7 +1,7 @@
 package template
 
 func init() {
-	DefaultPool.add("Dockerfile", Dockerfile, "")
+	DefaultPool.add("dockerfile", Dockerfile, "Dockerfile")
 }
 
 // Dockerfile 模版

@@ -31,11 +31,11 @@ type CreateTpl interface {
 // Create 解析模板创建文件
 func Create(c CreateTpl, name, project string) {
 	if c.Path() != "." {
-		log.Println("创建文件夹:", c.Path())
-		tools.CheckErr(os.MkdirAll(c.Path(), 0744))
+		dir := filepath.Dir(c.Path())
+		tools.CheckErr(os.MkdirAll(dir, 0744))
 	}
-	log.Println("创建文件:", name)
-	f, err := os.Create(filepath.Join(c.Path(), name))
+	log.Println("创建文件:", c.Path())
+	f, err := os.Create(filepath.Join(c.Path()))
 	tools.CheckErr(err)
 
 	tmpl, err := template.New("goProject").Parse(c.Content())
@@ -65,6 +65,7 @@ func Init(cmd *cobra.Command, args []string) {
 	}
 
 	for _, kind := range args {
+		kind = strings.ToLower(kind)
 		t := tpl.DefaulKind(kind)
 		Create(t, kind, project)
 	}

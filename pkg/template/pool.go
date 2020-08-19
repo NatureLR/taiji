@@ -8,6 +8,7 @@ import (
 // Pool 模板对象集合
 type Pool struct{ Templates map[string]*Template }
 
+// name文件的类型 path为路径和文件名的组合
 func (p *Pool) add(name, tpl, path string) {
 	if p.Templates == nil {
 		p.init()
@@ -54,7 +55,7 @@ func DefaulKind(kind string) *Template {
 	return DefaultPool.Templates[kind]
 }
 
-// AllKind 所有的某班类型
+// AllKind 所有的类型
 func AllKind() string {
 	var kinds []string
 

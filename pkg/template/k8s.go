@@ -1,7 +1,7 @@
 package template
 
 func init() {
-	DefaultPool.add("k8s.yaml", K8s, "")
+	DefaultPool.add("k8s", K8s, "k8s.yaml")
 }
 
 // K8s 文件模板
