@@ -38,7 +38,7 @@ cmd       |命令行参数代码  |croba的命令行代码  |
 
 ### Dockerfile
 
-采用多阶编译,默认使用编译镜像使用`golang:1.14-alpine`,运行镜像为`alpine:latest`,可自行替换私有仓库
+采用多阶编译,默认使用编译镜像使用`golang:1.15-alpine`,运行镜像为`alpine:latest`,可自行替换私有仓库
 镜像中修改时区为国内，以及镜像源替换为国内的命令
 
 ### Makefile
