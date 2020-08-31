@@ -43,57 +43,57 @@ BUILD = go build -ldflags $(LDFLAG) -o $(BIN_DIR)/$(PROJECT) .
 .PHONY: build
 build: 
 
-	$(BUILD)
+	@$(BUILD)
 
 # 直接运行不编译
 .PHONY: run
 run:
 	
-	go run .
+	@go run .
 
 # 安装二进制文件到系统path
 .PHONY: install
 install:
 
-	chmod +x $(BIN_DIR)/$(PROJECT) && mv $(BIN_DIR)/$(PROJECT) /usr/local/bin
+	@chmod +x $(BIN_DIR)/$(PROJECT) && mv $(BIN_DIR)/$(PROJECT) /usr/local/bin
 
 # 清理
 .PHONY: clean
 clean:
 	
-	rm  -rf $(PROJECT)	
+	@rm  -rf $(PROJECT)	
 
 # 编译为docker镜像
 .PHONY: docker
 ifeq ($(REGISTRY),)
 docker:
-	docker build -t $(PROJECT):latest -t $(PROJECT):$(VER) -f Dockerfile .
+	@docker build -t $(PROJECT):latest -t $(PROJECT):$(VER) -f Dockerfile .
 else
 docker: 
-	docker build -t $(REGISTRY)/$(PROJECT):latest -t $(REGISTRY)/$(PROJECT):$(VER) -f Dockerfile .
+	@docker build -t $(REGISTRY)/$(PROJECT):latest -t $(REGISTRY)/$(PROJECT):$(VER) -f Dockerfile .
 endif
 
 # Dockerfile中执行编译
 .PHONY: build_in_docker
 build_in_docker:
 
-	CGO_ENABLED=0 GOOS=linux go build -ldflags $(LDFLAG) .
+	@CGO_ENABLED=0 GOOS=linux go build -ldflags $(LDFLAG) .
 
 # 交叉编译为windows的二进制文件
 .PHONY: windows
 windows:
 
-	GOOS=windows $(BUILD)
+	@GOOS=windows $(BUILD)
 
 # 交叉编译为苹果osx的二进制文件
 .PHONY: darwin
 darwin:
 
-	GOOS=darwin $(BUILD)
+	@GOOS=darwin $(BUILD)
 
 # 交叉编译为arm的linux环境（树莓派等环境）二进制文件
 .PHONY: arm
 arm:
 
-	GOARCH=arm GOARM=7 GOOS=linux $(BUILD)
+	@GOARCH=arm GOARM=7 GOOS=linux $(BUILD)
 `
