@@ -22,13 +22,13 @@ endif
 
 GO_PATH = $(shell cat go.mod |grep module |cut -b 8-)
 
-VERSION =  -X '$(GO_PATH)/version.Version=$(VER)'
+VERSION =  -X '$(GO_PATH)/cmd.version=$(VER)'
 
-GO_VERSION = -X '$(GO_PATH)/version.GoVersion=$$(go version | awk '{printf($$3)}')'
+GO_VERSION = -X '$(GO_PATH)/cmd.goVersion=$$(go version | awk '{printf($$3)}')'
 
-GIT_COMMIT = -X '$(GO_PATH)/version.GitCommit=$$(git rev-parse HEAD)'
+GIT_COMMIT = -X '$(GO_PATH)/cmd.gitCommit=$$(git rev-parse HEAD)'
 
-BUILT = -X '$(GO_PATH)/version.Built=$$(date "+%Y-%m-%d %H:%M:%S")'
+BUILT = -X '$(GO_PATH)/cmd.built=$$(date "+%Y-%m-%d %H:%M:%S")'
 
 LDFLAG = "-s -w $(VERSION) $(GO_VERSION) $(GIT_COMMIT) $(BUILT)"
 

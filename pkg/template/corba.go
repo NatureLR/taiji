@@ -26,7 +26,6 @@ import (
 	"fmt"
 	"os"
 	"path/filepath"
-	"{{.importPath}}/version"
 	"strings"
 	homedir "github.com/mitchellh/go-homedir"
 	"github.com/spf13/cobra"
@@ -41,8 +40,9 @@ var rootCmd = &cobra.Command{
 	Long:  "跨行的长说明",
 	Run: func(cmd *cobra.Command, Args []string) {
 		//程序的入口
+		fmt.Println("Hellow World")
 	},
-	Version: version.Print(),
+	Version: versionString(),
 }
 
 // Execute 将所有的子命令加入到根命令并设置适当的flag
@@ -58,9 +58,7 @@ func init() {
 	cobra.OnInitialize(initConfig)
 
 	//在这里，您将定义标志和配置设置。Cobra支持持久性标志，如果在这里定义的话，这里的配置是全局的。
-
 	rootCmd.PersistentFlags().StringVar(&cfgFile, "config", "", "config file (default is $HOME/{{.project}}.yaml)")
-
 }
 
 // initConfig 读取配置文件和环境变量
@@ -76,13 +74,17 @@ func initConfig() {
 			fmt.Println(err)
 			os.Exit(1)
 		}
-
-
+		//用户配置目录
+		userConfigDir, err := os.UserConfigDir()
+		if err != nil {
+			fmt.Println(err)
+			os.Exit(1)
+		}
 		viper.SetConfigName("config")
 		viper.SetConfigType("yaml")
 		viper.AddConfigPath(home)                                        //家目录
 		viper.AddConfigPath(".")                                         //当前目录
-		viper.AddConfigPath("./config")                                  //当前目录下的config目录
+		viper.AddConfigPath(userConfigDir)                               //用户配置目录
 		viper.AddConfigPath(fmt.Sprint(filepath.Join("/", "etc", self))) //etc目录下程序的名字下的config.yaml
 	}
 

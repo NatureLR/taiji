@@ -54,6 +54,6 @@ var versionCmd = &cobra.Command{
 var versionFormat string
 
 func init() {
-	rootCmd.Flags().StringVarP(&versionFormat, "format", "f", "string", "版本信息输出的格式，目前有两种种:string,json")
+	versionCmd.Flags().StringVarP(&versionFormat, "format", "f", "string", "版本信息输出的格式，目前有两种种:string,json")
 	rootCmd.AddCommand(versionCmd)
 }
