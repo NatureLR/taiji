@@ -34,7 +34,11 @@ func defaultGOPATH() string {
 // 如果是就使用GOPATH的路径
 // 不是就需要指定mod
 func importPath(path string) string {
-	pwd := os.Getenv("PWD")
+	pwd, err := os.Getwd()
+	if err != nil {
+		log.Fatal(err)
+		os.Exit(1)
+	}
 	goPath := defaultGOPATH()
 
 	if strings.HasPrefix(pwd, goPath) {
