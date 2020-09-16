@@ -61,7 +61,7 @@ install:
 .PHONY: clean
 clean:
 	
-	@rm  -rf $(PROJECT)	
+	@rm -rf bin	test	
 
 # 编译为docker镜像
 .PHONY: docker
