@@ -1,7 +1,7 @@
 package template
 
 func init() {
-	DefaultPool.add("makefile", Makefile, "Makefile")
+	Default.Add("makefile", Makefile, "Makefile")
 }
 
 // Makefile 模板

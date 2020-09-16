@@ -1,7 +1,7 @@
 package template
 
 func init() {
-	DefaultPool.add("gitignore", Gitignore, ".gitignore")
+	Default.Add("gitignore", Gitignore, ".gitignore")
 }
 
 // Gitignore git的屏蔽模板

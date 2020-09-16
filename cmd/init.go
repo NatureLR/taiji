@@ -19,13 +19,13 @@ func initfFunc(cmd *cobra.Command, args []string) {
 
 	// 没有指定创建的文件类型就创建所有,制定了就创建指定的
 	if len(args) == 0 {
-		for _, t := range tpl.GetDefaul() {
+		for _, t := range tpl.Default.All() {
 			project.Create(t, mod)
 		}
 	} else {
 		for _, kind := range args {
 			kind = strings.ToLower(kind)
-			t := tpl.DefaulKind(kind)
+			t := tpl.Default.Get(kind)
 			project.Create(t, mod)
 		}
 	}
@@ -41,7 +41,7 @@ var initLong = fmt.Sprintf(`
 
 	在一个已经存在的项目中仅仅只是想创建个dockerfile:
 	在你想创建的位置执行 go-project init Dockerfil <其他文件>
-	`, tpl.AllKind())
+	`, tpl.Default.Allkind())
 
 var initCmd = &cobra.Command{
 	Use:   "init <类型>",

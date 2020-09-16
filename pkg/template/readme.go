@@ -1,7 +1,7 @@
 package template
 
 func init() {
-	DefaultPool.add("readme", Readme, "README.md")
+	Default.Add("readme", Readme, "README.md")
 }
 
 // Readme 文档模板

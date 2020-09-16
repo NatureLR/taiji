@@ -1,7 +1,7 @@
 package template
 
 func init() {
-	DefaultPool.add("license", License, "License")
+	Default.Add("license", License, "License")
 }
 
 // License apache协议

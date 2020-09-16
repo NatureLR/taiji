@@ -1,7 +1,7 @@
 package template
 
 func init() {
-	DefaultPool.add("version.go", Version, "version/version.go")
+	Default.Add("version.go", Version, "version/version.go")
 }
 
 // Version version.go模板
