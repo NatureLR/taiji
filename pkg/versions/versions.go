@@ -1,35 +1,3 @@
-package template
-
-func init() {
-	Default.Add("version.go", Version, "cmd/version.go")
-	Default.Add("versions.go", LibVersion, "pkg/versions/versions.go")
-}
-
-// Version cmd/version.go模板
-const Version = `
-package cmd
-
-import (
-	"{{.importPath}}/pkg/versions"
-	"github.com/spf13/cobra"
-)
-
-var versionCmd = &cobra.Command{
-	Use:   "version",
-	Short: "打印出版本号",
-	Run: func(cmd *cobra.Command, args []string) {
-		versions.Print()
-	},
-}
-
-func init() {
-	versionCmd.Flags().StringVarP(&versions.Format, "format", "f", "string", "版本信息输出的格式，目前有两种种:string,json")
-	rootCmd.AddCommand(versionCmd)
-}
-`
-
-// LibVersion cmd/version.go模板
-const LibVersion = `
 package versions
 
 import (
@@ -49,10 +17,10 @@ var (
 
 // Info 版本信息
 type Info struct {
-	Version   string {{.backquoted}}json:"version"{{.backquoted}}
-	GitCommit string {{.backquoted}}json:"gitCommit"{{.backquoted}}
-	GoVersion string {{.backquoted}}json:"goVersion"{{.backquoted}}
-	Built     string {{.backquoted}}json:"built"{{.backquoted}}
+	Version   string `json:"version"`
+	GitCommit string `json:"gitCommit"`
+	GoVersion string `json:"goVersion"`
+	Built     string `json:"built"`
 }
 
 // New 返回*info对象
@@ -114,4 +82,3 @@ func Print() {
 func Strings() string {
 	return Default.Strings(Format)
 }
-`

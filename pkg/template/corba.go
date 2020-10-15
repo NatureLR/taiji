@@ -27,6 +27,8 @@ import (
 	"os"
 	"path/filepath"
 	"strings"
+
+	"{{.importPath}}/pkg/versions"
 	homedir "github.com/mitchellh/go-homedir"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
@@ -42,7 +44,7 @@ var rootCmd = &cobra.Command{
 		//程序的入口
 		fmt.Println("Hellow World")
 	},
-	Version: versionString(),
+	Version: versions.Strings(),
 }
 
 // Execute 将所有的子命令加入到根命令并设置适当的flag

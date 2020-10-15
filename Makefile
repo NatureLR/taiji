@@ -9,14 +9,13 @@ ifneq ($(TAG),)
 VER = $(shell git tag --sort=committerdate |tail -1)
 endif
 
+VERSION =  -X '$(GO_PATH)/pkg/versions.xVersion=$(VER)'
 GO_PATH = $(shell cat go.mod |grep module |cut -b 8-)
-VERSION =  -X '$(GO_PATH)/cmd.version=$(VER)'
-GO_VERSION = -X '$(GO_PATH)/cmd.goVersion=$$(go version | awk '{printf($$3)}')'
-GIT_COMMIT = -X '$(GO_PATH)/cmd.gitCommit=$$(git rev-parse HEAD)'
-BUILT = -X '$(GO_PATH)/cmd.built=$$(date "+%Y-%m-%d %H:%M:%S")'
+GIT_COMMIT = -X '$(GO_PATH)/pkg/versions.xGitCommit=$$(git rev-parse HEAD)'
+BUILT = -X '$(GO_PATH)/pkg/versions.xBuilt=$$(date "+%Y-%m-%d %H:%M:%S")'
 LDFLAG = "-s -w $(VERSION) $(GO_VERSION) $(GIT_COMMIT) $(BUILT)"
-PROJECT = go-project
 
+PROJECT = go-project
 # 二进制文件生成目录
 BIN_DIR = bin
 BUILD = go build -ldflags $(LDFLAG) -o $(BIN_DIR)/$(PROJECT) .
@@ -50,9 +49,8 @@ docker: ## 编译为docker镜像
 	@docker build -t $(REGISTRY)/$(PROJECT):latest -t $(REGISTRY)/$(PROJECT):$(VER) -f Dockerfile .
 endif
 
-# Dockerfile中执行编译
 .PHONY: build_in_docker
-build_in_docker:
+build_in_docker: ## Dockerfile中执行编译
 	@CGO_ENABLED=0 GOOS=linux go build -ldflags $(LDFLAG) .
 
 .PHONY: windows

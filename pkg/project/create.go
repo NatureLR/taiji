@@ -75,5 +75,6 @@ func Create(c CreateTpl, mod string) {
 	tmpl.Execute(f, map[string]string{
 		"project":    peoject,
 		"importPath": impotPath,
+		"backquoted": "`",
 	})
 }

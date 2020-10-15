@@ -4,13 +4,14 @@ import (
 	"fmt"
 	"os"
 
+	"github.com/NatureLingRan/go-project/pkg/versions"
 	"github.com/spf13/cobra"
 )
 
 var rootCmd = &cobra.Command{
 	Use:     "go-project",
 	Short:   "用于创建GO项目的脚手架",
-	Version: versionString(),
+	Version: versions.Strings(),
 }
 
 // Execute 将所有的子命令加入到根命令并设置适当的flag
@@ -23,5 +24,5 @@ func Execute() {
 }
 
 func init() {
-	rootCmd.PersistentFlags().StringVar(&versionFormat, "format", "string", "版本信息输出的格式，目前有两种种:string,json")
+	rootCmd.PersistentFlags().StringVar(&versions.Format, "format", "string", "版本信息输出的格式，目前有两种:string,json")
 }
