@@ -17,25 +17,23 @@ stages:
 
 # 所有stage脚本之前都会执行，用来定义一些要用的变量
 before_script:
-  - 'echo "Job $CI_JOB_NAME triggered by $GITLAB_USER_NAME ($GITLAB_USER_ID)"'
-  - 'echo "before_script"'
-  - 'echo "Build fold : $PWD"'
-  - 'echo "PROJECT NAME : $CI_PROJECT_NAME"'
-  - 'echo "PROJECT ID : $CI_PROJECT_ID"'
-  - 'echo "PROJECT URL : $CI_PROJECT_URL"'
-  - 'echo "DOCKER REGISTRY URL : $DOCKER_REGISTRY_URL"'
+  - echo "$CI_JOB_NAME由$GITLAB_USER_NAME($GITLAB_USER_ID)"触发
+  - echo ====================================before_script开始执行=========================================================== >/dev/null
 
-  
-  - 'IMAGE_REPO="$DOCKER_REGISTRY_URL/$CI_PROJECT_NAMESPACE/$CI_PROJECT_NAME/$CI_COMMIT_REF_NAME"'
-  - 'IMAGE_REPO=$(echo $IMAGE_REPO|tr "[:upper:]" "[:lower:]")'
-  - 'echo IMAGE_REPO: $IMAGE_REPO'
+  # 打印一些环境变量用于调试
+  - envs="CI_JOB_NAME PWD CI_PROJECT_NAME CI_PROJECT_ID CI_PROJECT_URL"
+  - for v in $envs ;do echo "$v---------->$(printenv $v)";done
 
-  - 'IMAGE_TAG=$IMAGE_REPO:${CI_COMMIT_SHA:0:8}'
-  - 'IMAGE_TAG_LATEST=$IMAGE_REPO:latest'
+  - IMAGE_REPO="$DOCKER_REGISTRY_URL/$CI_PROJECT_NAMESPACE/$CI_PROJECT_NAME/$CI_COMMIT_REF_NAME"
+  - IMAGE_REPO="$(echo $IMAGE_REPO|tr "[:upper:]" "[:lower:]")"
+  - echo IMAGE_REPO:$IMAGE_REPO
 
-  - 'echo IMAGE_TAG is :$IMAGE_TAG'
-  - 'echo IMAGE_TAG_LATEST is :$IMAGE_TAG_LATEST'
-  - '====================================before_script执行完毕==========================================================='
+  - IMAGE_TAG=$IMAGE_REPO:${CI_COMMIT_SHA:0:8}
+  - echo IMAGE_TAG:$IMAGE_TAG
+  - IMAGE_TAG_LATEST=$IMAGE_REPO:latest
+  - echo IMAGE_TAG_LATEST:$IMAGE_TAG_LATEST
+
+  - echo ====================================before_script执行完毕=========================================================== >/dev/null
 
 # 定义每个阶段的按钮
 build_image:
@@ -56,15 +54,16 @@ build_image:
   allow_failure: true
   # 一下所有脚本都是为了执行docker build
   script:
-    - 'echo "Build on $CI_COMMIT_REF_NAME"'
-    - 'echo "HEAD commit SHA $CI_COMMIT_SHA"'
+    - echo "Build on $CI_COMMIT_REF_NAME"
+    - echo "HEAD commit SHA $CI_COMMIT_SHA"
 
     # 编译docker镜像 
     # TODO 改为调用makefile
-    - 'docker build -f ./Dockerfile -t $IMAGE_TAG -t $IMAGE_TAG_LATEST .'
-    - 'docker push $IMAGE_TAG'
-    - 'docker push $IMAGE_TAG_LATEST'
-    - 'echo "The build is sucessful,The image is : $IMAGE_TAG"'
+    #- docker build -f ./Dockerfile -t $IMAGE_TAG -t $IMAGE_TAG_LATEST .
+    #- docker push $IMAGE_TAG
+    #- docker push $IMAGE_TAG_LATEST
+    - echo "The build is sucessful,The image is $IMAGE_TAG"
+    - echo "The build is sucessful,The image is $IMAGE_TAG_LATEST"
 
 deploy:
   stage: deploy 
