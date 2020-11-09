@@ -1,7 +1,7 @@
 package template
 
 func init() {
-	Default.Add("gitlab-ci", GitlabCI, ".gitlab-ci.yml")
+	Default.Add("gitlabci", GitlabCI, ".gitlab-ci.yml")
 }
 
 // GitlabCI 文件模板
