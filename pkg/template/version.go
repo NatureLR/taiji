@@ -3,6 +3,7 @@ package template
 func init() {
 	Default.Add("version.go", Version, "cmd/version.go")
 	Default.Add("versions.go", LibVersion, "pkg/versions/versions.go")
+	Default.Add("description.go", Description, "pkg/versions/description.go")
 }
 
 // Version cmd/version.go模板
@@ -114,4 +115,16 @@ func Print() {
 func Strings() string {
 	return Default.Strings(Format)
 }
+`
+
+// Description 版本描述
+const Description = `
+package versions
+
+// Short 简单的描述
+var Short = "用于创建GO项目的脚手架"
+
+// Long 长描述
+var Long = ""
+// TODO 改为从README中动态加载
 `

@@ -7,6 +7,7 @@ import (
 	"text/template"
 
 	"github.com/NatureLingRan/go-project/pkg/tools"
+	"github.com/NatureLingRan/go-project/pkg/versions"
 )
 
 // CreateTpl 创建模板的接口
@@ -32,9 +33,10 @@ func Create(c CreateTpl, mod string) {
 	tools.CheckErr(err)
 
 	err = tmpl.Execute(f, map[string]string{
-		"project":    peoject,
-		"importPath": impotPath,
-		"backquoted": "`",
+		"project":     peoject,
+		"importPath":  impotPath,
+		"backquoted":  "`",
+		"description": versions.Short,
 	})
 	tools.CheckErr(err)
 }

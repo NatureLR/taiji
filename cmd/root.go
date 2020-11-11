@@ -10,7 +10,7 @@ import (
 
 var rootCmd = &cobra.Command{
 	Use:     "go-project",
-	Short:   "用于创建GO项目的脚手架",
+	Short:   versions.Short,
 	Version: versions.Strings(),
 }
 

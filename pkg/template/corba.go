@@ -38,8 +38,8 @@ var cfgFile string
 
 var rootCmd = &cobra.Command{
 	Use:   "{{.project}}",
-	Short: "对于的程序简单的说明",
-	Long:  "跨行的长说明",
+	Short: versions.Short,
+	Long:  versions.Long,
 	Run: func(cmd *cobra.Command, Args []string) {
 		//程序的入口
 		fmt.Println("Hellow World")
