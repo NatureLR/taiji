@@ -121,10 +121,10 @@ func Strings() string {
 const Description = `
 package versions
 
-// Short 简单的描述
-var Short = "用于创建GO项目的脚手架"
+// ShortDescribe 简单的描述
+var ShortDescribe = "用于创建GO项目的脚手架"
 
-// Long 长描述
-var Long = ""
+// LongDescribe 长描述
+var LongDescribe = ""
 // TODO 改为从README中动态加载
 `
