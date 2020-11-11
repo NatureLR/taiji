@@ -33,10 +33,11 @@ func Create(c CreateTpl, mod string) {
 	tools.CheckErr(err)
 
 	err = tmpl.Execute(f, map[string]string{
-		"project":     peoject,
-		"importPath":  impotPath,
-		"backquoted":  "`",
-		"description": versions.Short,
+		"project":       peoject,
+		"importPath":    impotPath,
+		"backquoted":    "`",
+		"ShortDescribe": versions.ShortDescribe,
+		"LongDescribe":  versions.LongDescribe,
 	})
 	tools.CheckErr(err)
 }

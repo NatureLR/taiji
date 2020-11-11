@@ -38,8 +38,8 @@ var cfgFile string
 
 var rootCmd = &cobra.Command{
 	Use:   "{{.project}}",
-	Short: versions.Short,
-	Long:  versions.Long,
+	Short: versions.ShortDescribe,
+	Long:  versions.LongDescribe,
 	Run: func(cmd *cobra.Command, Args []string) {
 		//程序的入口
 		fmt.Println("Hellow World")
@@ -74,13 +74,11 @@ func initConfig() {
 		home, err := homedir.Dir()
 		if err != nil {
 			fmt.Println(err)
-			os.Exit(1)
 		}
 		//用户配置目录
 		userConfigDir, err := os.UserConfigDir()
 		if err != nil {
 			fmt.Println(err)
-			os.Exit(1)
 		}
 		viper.SetConfigName("config")
 		viper.SetConfigType("yaml")
