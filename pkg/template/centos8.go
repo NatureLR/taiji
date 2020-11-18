@@ -6,7 +6,8 @@ func init() {
 
 // Centos8 rpm打包dockerfile
 const Centos8 = `
-#ARG GO_IMAGE
+# ARG GO_IMAGE
+
 FROM golang:1.15 AS golang
 
 FROM centos:centos8
@@ -19,9 +20,9 @@ RUN mkdir /etc/yum.repos.d/bak && mv /etc/yum.repos.d/*repo /etc/yum.repos.d/bak
 RUN  yum install -y rpm-build rpmlint yum-utils rpmdevtools make git 
 RUN  rpmdev-setuptree
 
-WORKDIR /root
+WORKDIR /root/rpmbuild
 
-COPY SPECS rpmbuild/SPECS
+COPY SPECS SPECS
 
 # 从golang官方镜像中拷贝到centos镜像
 ENV PATH $PATH:/usr/local/go/bin:$GOPATH/bin

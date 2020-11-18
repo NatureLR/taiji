@@ -9,12 +9,13 @@ import (
 func init() {
 	Default.Add(
 		"rpm",
-		RPM,
+		RPMSPEC,
 		fmt.Sprintf("build/rpm/SPECS/%s.spec", filepath.Base(os.Getenv("PWD"))))
+	Default.Add("rpmMakefile", RPMMAKEFILE, "build/rpm/Makefile")
 }
 
-// RPM 生成rpm包的spec模板
-const RPM = `
+// RPMSPEC 生成rpm包的spec模板
+const RPMSPEC = `
 %global debug_package %{nil}
 
 Name:           {{.project}}
@@ -75,4 +76,57 @@ install -D -m 0644 ${RPM_BUILD_DIR}/src/{{.project}}/build/systemd/{{.project}}.
 
 # 变更记录
 %changelog
+`
+
+// RPMMAKEFILE 生成rpm包的makefile模板
+const RPMMAKEFILE = `
+# 将项目打包的tgz文件放入rpmbuild/SOURCES
+tgz ?=mkdir -p rpmbuild/SOURCES  && if [ ! -d "../tgz" ]; then echo tgz文件不存在创建tgz包;$(MAKE) -C ../ tgz && cp -f ../tgz/*tar.gz rpmbuild/SOURCES;fi
+
+# 根据各个系统构建编译环境的容器
+BUILD ?= DOCKER_BUILDKIT=1 \
+	docker build \
+	$(BUILD_IMAGE_FLAG) \
+	--build-arg GO_IMAGE=$(GO_IMAGE) \
+	-t rpmbuild-$@ \
+	-f $@/Dockerfile \
+	.
+
+# 申明需要构建的specs文件
+SPEC_FILES ?= {{.project}}.spec 
+SPECS?=$(addprefix SPECS/, $(SPEC_FILES))
+# 在各个系统
+RPMBUILD_FLAG ?= -ba \
+	--define '_version v1.1.1' \
+	$(SPECS)
+# 在容器里运行rpmbuild打包生成rpm文件
+RUN = docker run \
+	-v $(CURDIR)/rpmbuild/RPMS:/root/rpmbuild/RPMS \
+	-v $(CURDIR)/rpmbuild/SRPMS:/root/rpmbuild/SRPMS \
+	-v $(CURDIR)/rpmbuild/SOURCES:/root/rpmbuild/SOURCES \
+	rpmbuild-$@ $(RPMBUILD_FLAG)
+
+CENTOS_RELEASES ?= centos-8
+# 目标操作系统
+DISTROS := $(CENTOS_RELEASES)
+
+.PHONY: help
+help: ## 显示make的目标
+	@awk 'BEGIN {FS = ":.*?## "} /^[a-zA-Z_-]+:.*?## / {sub("\\\\n",sprintf("\n%22c"," "), $$2);printf " \033[36m%-20s\033[0m  %s\n", $$1, $$2}' $(MAKEFILE_LIST)
+
+.PHONY: clean
+clean: ## 删除rpmbuild的包和中间产生的文件
+	rm -rf rpmbuild
+
+.PHONY: $(DISTROS)
+$(DISTROS):
+	$(tgz)
+	$(BUILD)
+	$(RUN)
+.PHONY: rpm
+rpm: ## 打包为rpm所有系统的rpm包
+	CENTOS_RELEASES
+
+.PHONY: centos-8
+centos-8: ## 打包为centos8
 `
