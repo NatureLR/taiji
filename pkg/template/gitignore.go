@@ -8,4 +8,6 @@ func init() {
 const Gitignore = `{{.project}}
 .vscode
 bin
+build/tgz
+build/rpm/rpmbuild
 `

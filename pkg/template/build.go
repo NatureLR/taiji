@@ -5,8 +5,8 @@ func init() {
 }
 
 // BUILDMAKEFILE build目录下的makefile需要和根目录下的makefile合并
-const BUILDMAKEFILE = `
-project := {{.project}}
+const BUILDMAKEFILE = `# 编译rpm包和tar包需要和根目录下的Makefil合并
+PROJECT := {{.project}}
 
 .PHONY: help
 help: ## 显示make的目标
@@ -25,8 +25,8 @@ rpm:
 tgz: ## 将项目打包为tar.gz
 	mkdir -p tgz
 	docker run --rm -w / \
-		-v $(realpath $(CURDIR)/../../$(project)):/$(project) \
+		-v $(realpath $(CURDIR)/../../$(PROJECT)):/$(PROJECT) \
 		-v $(CURDIR)/tgz:/v \
 		alpine \
-		sh -c "tar -cf $(project).tar.gz $(project) && mv $(project).tar.gz /v"
+		sh -c "tar -cf $(PROJECT).tar.gz $(PROJECT) && mv $(PROJECT).tar.gz /v"
 `
