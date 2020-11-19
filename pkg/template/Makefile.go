@@ -31,6 +31,11 @@ BUILD = go build -ldflags $(LDFLAG) -o $(BIN_DIR)/$(PROJECT) .
 help: ## 显示make的目标
 	@awk 'BEGIN {FS = ":.*?## "} /^[a-zA-Z_-]+:.*?## / {sub("\\\\n",sprintf("\n%22c"," "), $$2);printf " \033[36m%-20s\033[0m  %s\n", $$1, $$2}' $(MAKEFILE_LIST)
 
+.PHONY: clean
+clean: ## 清理
+	rm -rf bin
+	$(MAKE) -C build clean
+
 .PHONY: build
 build: ## 编译为当前系统的二进制文件
 	@$(BUILD)
@@ -42,10 +47,6 @@ run: ## 直接运行不编译
 .PHONY: install
 install: ## 安装二进制文件到系统path
 	@chmod +x $(BIN_DIR)/$(PROJECT) && mv $(BIN_DIR)/$(PROJECT) /usr/local/bin
-
-.PHONY: clean
-clean: ## 清理
-	@rm -rf bin	test	
 
 .PHONY: docker
 ifeq ($(REGISTRY),)

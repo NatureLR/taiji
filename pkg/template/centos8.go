@@ -5,7 +5,7 @@ func init() {
 }
 
 // Centos8 rpm打包dockerfile
-const Centos8 = `
+const Centos8 = `# 构建centos-8构建环境
 ARG GO_IMAGE
 ARG BUILD_OS=centos
 ARG BUILD_VERSION=8
