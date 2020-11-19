@@ -80,6 +80,10 @@ install -D -m 0644 ${RPM_BUILD_DIR}/src/{{.project}}/build/systemd/{{.project}}.
 
 // RPMMAKEFILE 生成rpm包的makefile模板
 const RPMMAKEFILE = `
+GO_VERSION ?= 1.15
+GO_BASE_IMAGE ?= golang
+GO_IMAGE?=$(GO_BASE_IMAGE):$(GO_VERSION)
+
 # 将项目打包的tgz文件放入rpmbuild/SOURCES
 tgz ?=mkdir -p rpmbuild/SOURCES  && if [ ! -d "../tgz" ]; then echo tgz文件不存在创建tgz包;$(MAKE) -C ../ tgz && cp -f ../tgz/*tar.gz rpmbuild/SOURCES;fi
 

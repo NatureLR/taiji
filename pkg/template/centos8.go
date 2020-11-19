@@ -6,11 +6,14 @@ func init() {
 
 // Centos8 rpm打包dockerfile
 const Centos8 = `
-# ARG GO_IMAGE
+ARG GO_IMAGE
+ARG BUILD_OS=centos
+ARG BUILD_VERSION=8
+ARG BUILD_IMAGE=${BUILD_OS}:${BUILD_VERSION}
 
-FROM golang:1.15 AS golang
+FROM ${GO_IMAGE} AS golang
 
-FROM centos:centos8
+FROM ${BUILD_IMAGE}
 
 # 更换源为阿里源
 RUN mkdir /etc/yum.repos.d/bak && mv /etc/yum.repos.d/*repo /etc/yum.repos.d/bak && \
