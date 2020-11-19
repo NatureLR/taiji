@@ -3,6 +3,7 @@ package cmd
 import (
 	"fmt"
 	"log"
+	"os/exec"
 	"strings"
 
 	"github.com/NatureLingRan/go-project/pkg/template"
@@ -16,11 +17,25 @@ func initfFunc(cmd *cobra.Command, args []string) {
 		}
 	}()
 
+	shell := func(command string) {
+		cmd := exec.Command("/bin/bash", "-c", command)
+		bytes, err := cmd.CombinedOutput()
+		if err != nil {
+			log.Println(err)
+		}
+		fmt.Println(string(bytes))
+	}
+
 	// 没有指定创建的文件类型就创建所有,制定了就创建指定的
 	if len(args) == 0 {
 		for _, t := range template.Default.All() {
 			template.Create(t, mod)
 		}
+
+		log.Println("初始化:GO MOD")
+		shell(fmt.Sprintf("go mod init %s", mod))
+		log.Println("初始化:GIT")
+		shell("git init")
 	} else {
 		for _, kind := range args {
 			kind = strings.ToLower(kind)
