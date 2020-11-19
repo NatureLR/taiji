@@ -80,7 +80,7 @@ install -D -m 0644 ${RPM_BUILD_DIR}/src/{{.project}}/build/systemd/{{.project}}.
 
 // RPMMAKEFILE 生成rpm包的makefile模板
 const RPMMAKEFILE = `# 通过容器构建各个系统各个版本的rpm包
-VERSION ?= 
+VERSION ?= $(shell git describe --tags --always --dirty="-dev" )
 # ================ go版本配置 ================
 GO_VERSION ?= 1.15
 GO_BASE_IMAGE ?= golang
