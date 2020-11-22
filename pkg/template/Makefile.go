@@ -161,16 +161,14 @@ build-in-docker: ## Dockerfile中执行编译
 .PHONY: rpm	
 rpm: ## 构建rpm系统的包
 	@echo ================ 容器构建RPM包 ================
-	$(MAKE) -C rpm 
+	$(MAKE) -C ./rpm rpm 
 
 .PHONY: centos	
 centos: ## 构建centos系统
-	$(MAKE) -C centos
+	$(MAKE) -C ./rpm centos
 
 .PHONY: centos-8	
 entos-8: ## 构建centos-8系统的包
-	$(MAKE) -C centos-8
+	$(MAKE) -C ./rpm centos-8
 
-test:
-	echo $(ROOT_DIR)
 `
