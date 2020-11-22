@@ -55,7 +55,7 @@ BuildRequires:  make
 # 编译脚本
 %build
 
-cd {{.project}} && make build
+cd {{.project}} && make -C build build
 
 # 检查
 %check
