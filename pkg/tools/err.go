@@ -17,15 +17,6 @@ func CheckErr(err error) {
 	checkErr(err)
 }
 
-func catch(err *error, handler ...func()) {
-	if e := recover(); e != nil {
-		*err = e.(error)
-	}
-	for _, h := range handler {
-		h()
-	}
-}
-
 func trace(msg string, args ...interface{}) string {
 	msg = fmt.Sprintf(msg, args...)
 	logs := []string{msg, ""}
