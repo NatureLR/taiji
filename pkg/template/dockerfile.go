@@ -38,6 +38,9 @@ WORKDIR /root/
 #    apk add --no-cache ca-certificates tzdata  && \
 #    ln -s /usr/share/zoneinfo/Asia/Shanghai /etc/localtime
 
+# 添加nsswitch.conf，如不添加hosts文件无效
+[ ! -e /etc/nsswitch.conf ] && echo 'hosts: files dns' > /etc/nsswitch.conf
+
 COPY --from=build /build/{{.project}} .
 
 #EXPOSE <port>
