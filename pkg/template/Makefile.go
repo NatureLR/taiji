@@ -57,8 +57,8 @@ docker: ## 编译为docker镜像
 	@docker build -t $(REGISTRY)/$(PROJECT):latest -t $(REGISTRY)/$(PROJECT):$(VER) -f Dockerfile .
 endif
 
-.PHONY: build_in_docker
-build_in_docker: ## Dockerfile中执行编译
+.PHONY: build-in-docker
+build-in-docker: ## Dockerfile中执行编译
 	@CGO_ENABLED=0 GOOS=linux go build -ldflags $(LDFLAG) .
 
 .PHONY: windows
