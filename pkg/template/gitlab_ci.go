@@ -52,7 +52,7 @@ build_image:
   when: manual
   # 允许失败
   allow_failure: true
-  # 一下所有脚本都是为了执行docker build
+  # 以下所有脚本都是为了执行docker build
   script:
     - echo "Build on $CI_COMMIT_REF_NAME"
     - echo "HEAD commit SHA $CI_COMMIT_SHA"
