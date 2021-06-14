@@ -6,8 +6,8 @@ import (
 	"path/filepath"
 	"text/template"
 
-	"github.com/NatureLingRan/go-project/pkg/tools"
-	"github.com/NatureLingRan/go-project/pkg/versions"
+	"github.com/naturelr/go-project/pkg/tools"
+	"github.com/naturelr/go-project/pkg/versions"
 )
 
 // CreateTpl 创建模板的接口

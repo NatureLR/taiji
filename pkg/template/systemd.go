@@ -20,7 +20,7 @@ const Systemd = `
 # 简单的描述
 Description={{.ShortDescribe}}
 # 文档地址
-#Documentation=https://github.com/NatureLingRan/go-project
+#Documentation=https://github.com/naturelr/go-project
 # 在某服务启动之前启动
 #Before=
 # multi-user.target组之后启动

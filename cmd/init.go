@@ -6,7 +6,7 @@ import (
 	"os/exec"
 	"strings"
 
-	"github.com/NatureLingRan/go-project/pkg/template"
+	"github.com/naturelr/go-project/pkg/template"
 	"github.com/spf13/cobra"
 )
 
