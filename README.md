@@ -1,7 +1,7 @@
 # 太极
 
-> 无极生太极，太极生两仪，两仪生三才，三才生四象。。。
-> 一个go脚手架,目的是粗了业务之外所有的东西
+> 无极生太极，太极生两仪。。。
+> 一个go脚手架,目的是能够编译出多平台的二进制,镜像,rpm,debu,等格式的软件包，自动生成版本且保持一致
 
 ## 安装使用
 
@@ -39,14 +39,30 @@ taiji init <文件类型> --mod=<模块名字>
 
 在编译的时候注入版本信息到go文件中,如果有tag则为tag版本没有则为提交次数和hash,提供常用系统下的交编译命令,去除了字符链接缩小体积
 
-### K8s
+## TODO
 
-描述k8s资源的文件，需要自行替换镜像
+* 使用embed来动态的载入模板文件
 
-### gitignore
+* 使用`git describe --tags --always --dirty="-dev"`替代if判断来生成自动生成版本号
 
-git屏蔽的文件，默认有项目的名字和.vscode文件夹
+* deb包的支持自动生成
 
-### License
+* 多平台支持
 
-默认为apache2.0协议
+* 参数考虑，go的版本(GOVERSION),架构(ARCH),系统(OS),docker的运行的版本,docker仓库(docker repo）
+
+* 生成文件格式改为下面的
+
+```text
+artifacts
+├── arm
+│   ├── deb
+│   └── rpm
+├── bin
+│   └── test
+└── x86_64
+    ├── deb
+    │   └── test.deb
+    └── rpm
+        └── test.rpm
+```
