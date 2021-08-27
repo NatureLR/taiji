@@ -27,10 +27,6 @@ PROJECT = {{.project}}
 BIN_DIR = bin
 BUILD = go build -ldflags $(LDFLAG) -o $(BIN_DIR)/$(PROJECT) .
 
-.PHONY: help
-help: ## 显示make的目标
-	@awk 'BEGIN {FS = ":.*?## "} /^[a-zA-Z_-]+:.*?## / {sub("\\\\n",sprintf("\n%22c"," "), $$2);printf " \033[36m%-20s\033[0m  %s\n", $$1, $$2}' $(MAKEFILE_LIST)
-
 .PHONY: clean
 clean: ## 清理
 	rm -rf bin
@@ -39,6 +35,10 @@ clean: ## 清理
 .PHONY: build
 build: ## 编译为当前系统的二进制文件
 	@$(BUILD)
+
+.PHONY: help
+help: ## 显示make的目标
+	@awk 'BEGIN {FS = ":.*?## "} /^[a-zA-Z_-]+:.*?## / {sub("\\\\n",sprintf("\n%22c"," "), $$2);printf " \033[36m%-20s\033[0m  %s\n", $$1, $$2}' $(MAKEFILE_LIST)
 
 .PHONY: run
 run: ## 直接运行不编译

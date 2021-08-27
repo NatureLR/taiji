@@ -20,10 +20,6 @@ PROJECT = go-project
 BIN_DIR = bin
 BUILD = go build -ldflags $(LDFLAG) -o $(BIN_DIR)/$(PROJECT) .
 
-.PHONY: help
-help: ## 显示make的目标
-	@awk 'BEGIN {FS = ":.*?## "} /^[a-zA-Z_-]+:.*?## / {sub("\\\\n",sprintf("\n%22c"," "), $$2);printf " \033[36m%-20s\033[0m  %s\n", $$1, $$2}' $(MAKEFILE_LIST)
-
 .PHONY: build
 build: ## 编译为当前系统的二进制文件
 	@$(BUILD)
@@ -64,3 +60,7 @@ darwin: ## 交叉编译为苹果osx的二进制文件
 .PHONY: arm
 arm: ## 交叉编译为arm的linux环境（树莓派等环境）二进制文件
 	@GOARCH=arm GOARM=7 GOOS=linux $(BUILD)
+
+.PHONY: help
+help: ## 显示make的目标
+	@awk 'BEGIN {FS = ":.*?## "} /^[a-zA-Z_-]+:.*?## / {sub("\\\\n",sprintf("\n%22c"," "), $$2);printf " \033[36m%-20s\033[0m  %s\n", $$1, $$2}' $(MAKEFILE_LIST)
