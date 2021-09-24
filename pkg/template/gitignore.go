@@ -7,8 +7,7 @@ func init() {
 // Gitignore git的屏蔽模板
 const Gitignore = `{{.project}}
 .vscode
-bin
-build/tgz
-build/rpm/rpmbuild
+bin/
+build/
 .DS_Store
 `
