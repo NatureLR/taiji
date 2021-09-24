@@ -1,7 +1,7 @@
 package main
 
 import (
-	"github.com/naturelr/go-project/cmd"
+	"github.com/naturelr/taiji/cmd"
 )
 
 func main() {

@@ -1,7 +1,7 @@
 package cmd
 
 import (
-	"github.com/naturelr/go-project/pkg/versions"
+	"github.com/naturelr/taiji/pkg/versions"
 	"github.com/spf13/cobra"
 )
 
