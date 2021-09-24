@@ -47,7 +47,7 @@ taiji init <文件类型> --mod=<模块名字>
 
 * deb包的支持自动生成
 
-* 多平台支持
+* 多平台支持
 
 * 参数考虑，go的版本(GOVERSION),架构(ARCH),系统(OS),docker的运行的版本,docker仓库(docker repo）
 
