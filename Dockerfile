@@ -1,6 +1,6 @@
 
 # 编译镜像
-FROM golang:1.14-alpine as build
+FROM golang:1.17-alpine as build
 
 WORKDIR /build
 
@@ -28,10 +28,10 @@ WORKDIR /root/
 #    apk add --no-cache ca-certificates tzdata  && \
 #    ln -s /usr/share/zoneinfo/Asia/Shanghai /etc/localtime
 
-COPY --from=build /build/go-project .
+COPY --from=build /build/taiji .
 
 #EXPOSE <port>
 
-#ENTRYPOINT ["./go-project"]
+#ENTRYPOINT ["./taiji"]
 
-CMD ["./go-project"]
+CMD ["./taiji"]

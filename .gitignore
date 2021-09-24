@@ -1,4 +1,5 @@
-go-project
+taiji
 .vscode
 bin
 test
+.DS_Store

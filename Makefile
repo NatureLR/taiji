@@ -23,7 +23,7 @@ GIT_COMMIT = -X '$(GO_PATH)/pkg/versions.xGitCommit=$$(git rev-parse HEAD)'
 BUILT = -X '$(GO_PATH)/pkg/versions.xBuilt=$$(date "+%Y-%m-%d %H:%M:%S")'
 LDFLAG = "-s -w $(VERSION) $(GO_VERSION) $(GIT_COMMIT) $(BUILT)"
 
-PROJECT = go-project
+PROJECT = taiji
 # 二进制文件生成目录
 BIN_DIR = bin
 BUILD = go build -ldflags $(LDFLAG) -o $(BIN_DIR)/$(PROJECT) .

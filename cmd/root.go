@@ -4,12 +4,12 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/naturelr/go-project/pkg/versions"
+	"github.com/naturelr/taiji/pkg/versions"
 	"github.com/spf13/cobra"
 )
 
 var rootCmd = &cobra.Command{
-	Use:     "go-project",
+	Use:     "taiji",
 	Short:   versions.ShortDescribe,
 	Version: versions.Strings(),
 }

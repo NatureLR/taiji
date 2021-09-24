@@ -10,4 +10,5 @@ const Gitignore = `{{.project}}
 bin
 build/tgz
 build/rpm/rpmbuild
+.DS_Store
 `

@@ -6,7 +6,7 @@ import (
 	"os/exec"
 	"strings"
 
-	"github.com/naturelr/go-project/pkg/template"
+	"github.com/naturelr/taiji/pkg/template"
 	"github.com/spf13/cobra"
 )
 
@@ -46,15 +46,15 @@ func initfFunc(cmd *cobra.Command, args []string) {
 }
 
 var initLong = fmt.Sprintf(`
-	如果只创建某个文件执行: go-project init <文件类型>
+	如果只创建某个文件执行: taiji init <文件类型>
 	目前支持文件类型有:%s
 
 	例子：
 	创建一个项目:
-	以项目的名字创建一个文件夹，然后在文件夹里执行go-project init 
+	以项目的名字创建一个文件夹，然后在文件夹里执行taiji init 
 
 	在一个已经存在的项目中仅仅只是想创建个dockerfile:
-	在你想创建的位置执行 go-project init Dockerfil <其他文件>
+	在你想创建的位置执行 taiji init Dockerfil <其他文件>
 	`, template.Default.Allkind())
 
 var initCmd = &cobra.Command{
