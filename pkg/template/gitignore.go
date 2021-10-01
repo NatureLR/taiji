@@ -10,4 +10,5 @@ const Gitignore = `{{.project}}
 bin/
 build/
 .DS_Store
+artifacts/
 `

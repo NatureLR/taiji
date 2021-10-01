@@ -1,7 +1,7 @@
 package template
 
 func init() {
-	Default.Add("dockerfile", Dockerfile, "Dockerfile")
+	Default.Add("dockerfile", Dockerfile, "build/Dockerfile")
 }
 
 // Dockerfile 模版
