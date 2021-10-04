@@ -8,9 +8,7 @@ func init() {
 
 const DEBDOCKERFILE = `#编译deb的
 ARG GO_IMAGE
-ARG DISTRO=debian
-ARG SUITE=buster
-ARG BUILD_IMAGE=${DISTRO}:${SUITE}
+ARG BUILD_IMAGE
 
 FROM ${GO_IMAGE} AS golang
 
