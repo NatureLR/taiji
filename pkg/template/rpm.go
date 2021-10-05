@@ -10,8 +10,8 @@ func init() {
 	Default.Add(
 		"rpm",
 		RPMSPEC,
-		fmt.Sprintf("build/rpm/SPECS/%s.spec", filepath.Base(os.Getenv("PWD"))))
-	Default.Add("rpmMakefile", RPMMAKEFILE, "build/rpm/Makefile")
+		fmt.Sprintf("build/rpm/%s.spec", filepath.Base(os.Getenv("PWD"))))
+	Default.Add("rpmDockerfile", RPMDOCKERFILE, "build/rpm/Dockerfile")
 }
 
 // RPMSPEC 生成rpm包的spec模板
@@ -55,17 +55,17 @@ BuildRequires:  make
 # 编译脚本
 %build
 
-cd {{.project}} && make -C build build
+cd {{.project}} && make build
 
 # 检查
 %check
 
-{{.project}}/bin/{{.project}} version
+{{.project}}/artifacts/bin/{{.project}} version
 
 # 安装阶段需要做的
 %install
 
-install -D  -p  -m 0755 ${RPM_BUILD_DIR}/src/{{.project}}/bin/{{.project}} ${RPM_BUILD_ROOT}%{_bindir}/{{.project}}
+install -D  -p  -m 0755 ${RPM_BUILD_DIR}/src/{{.project}}/artifacts/bin/{{.project}} ${RPM_BUILD_ROOT}%{_bindir}/{{.project}}
 install -D -m 0644 ${RPM_BUILD_DIR}/src/{{.project}}/build/systemd/{{.project}}.service ${RPM_BUILD_ROOT}%{_unitdir}/{{.project}}.service
 
 # 说明%{buildroot}中那些文件和目录需要打包到rpm中
@@ -78,66 +78,25 @@ install -D -m 0644 ${RPM_BUILD_DIR}/src/{{.project}}/build/systemd/{{.project}}.
 %changelog
 `
 
-// RPMMAKEFILE 生成rpm包的makefile模板
-const RPMMAKEFILE = `# 通过容器构建各个系统各个版本的rpm包
-VERSION ?= $(shell git describe --tags --always --dirty=".dev")
-# ================ go版本配置 ================
-GO_VERSION ?= 1.15
-GO_BASE_IMAGE ?= golang
-GO_IMAGE ?= $(GO_BASE_IMAGE):$(GO_VERSION)
+// RPMDOCKERFILE 生成rpm包的dockerfile模板
+const RPMDOCKERFILE = `# rpm构建环境
+ARG GO_IMAGE
+ARG BUILD_IMAGE
 
-# 将项目打包的tgz文件放入rpmbuild/SOURCES
-tgz ?= mkdir -p rpmbuild/SOURCES  && if [ ! -d "../tgz" ]; then echo tgz文件不存在创建tgz包;$(MAKE) -C ../ tgz && cp -f ../tgz/*tar.gz rpmbuild/SOURCES;fi
+# 从此镜像中获取go
+FROM ${GO_IMAGE} AS golang
 
-# 根据各个系统构建编译环境的容器
-BUILD ?= DOCKER_BUILDKIT=1 \
-	docker build \
-	$(BUILD_IMAGE_FLAG) \
-	--build-arg GO_IMAGE=$(GO_IMAGE) \
-	-t rpmbuild-$@ \
-	-f $@/Dockerfile \
-	.
+FROM ${BUILD_IMAGE}
 
-# ================ 配置构建的specs文件 ================
-SPEC_FILES ?= {{.project}}.spec 
-SPECS ?= $(addprefix SPECS/, $(SPEC_FILES))
-# 在各个系统
-RPMBUILD_FLAG ?= -ba \
-	--define '_version ${VERSION}' \
-	$(SPECS)
-# 在容器里运行rpmbuild打包生成rpm文件
-RUN ?= docker run \
-	-v $(CURDIR)/rpmbuild/RPMS:/root/rpmbuild/RPMS \
-	-v $(CURDIR)/rpmbuild/SRPMS:/root/rpmbuild/SRPMS \
-	-v $(CURDIR)/rpmbuild/SOURCES:/root/rpmbuild/SOURCES \
-	rpmbuild-$@ $(RPMBUILD_FLAG)
+# 安装rpmbuild 工具
+RUN  yum install -y rpm-build rpmlint yum-utils rpmdevtools make git 
+RUN  rpmdev-setuptree
 
-# ================ 目标操作系统配置 ================
-CENTOS_RELEASES ?= centos-8
-DISTROS := $(CENTOS_RELEASES)
+WORKDIR /root/rpmbuild
 
-.PHONY: help
-help: ## 显示make的目标
-	@awk 'BEGIN {FS = ":.*?## "} /^[a-zA-Z_-]+:.*?## / {sub("\\\\n",sprintf("\n%22c"," "), $$2);printf " \033[36m%-20s\033[0m  %s\n", $$1, $$2}' $(MAKEFILE_LIST)
+# 从golang官方镜像中拷贝到centos镜像
+ENV PATH $PATH:/usr/local/go/bin:$GOPATH/bin
+COPY --from=golang /usr/local/go /usr/local/go
 
-.PHONY: clean
-clean: ## 删除rpmbuild的包和中间产生的文件
-	rm -rf rpmbuild
-
-.PHONY: $(DISTROS)
-$(DISTROS):
-	@echo "================ 构建$@ ================"
-	$(tgz)
-	$(BUILD)
-	$(RUN)
-	@echo "================ 构建$@完成 ================"
-
-.PHONY: rpm
-rpm: centos ## 构建使用rpm系统的包
-	
-.PHONY: centos
-centos: $(CENTOS_RELEASES) ## 构建centos的rpm包
-
-.PHONY: centos-8
-centos-8: ## 构建centos8的rpm包
+ENTRYPOINT ["/bin/rpmbuild"]
 `

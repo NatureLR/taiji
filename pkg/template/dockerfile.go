@@ -1,13 +1,16 @@
 package template
 
 func init() {
-	Default.Add("dockerfile", Dockerfile, "Dockerfile")
+	Default.Add("dockerfile", Dockerfile, "build/Dockerfile")
 }
 
 // Dockerfile 模版
-const Dockerfile = `
+const Dockerfile = `# 编译镜像 golang:x.y.z-alpine3.13
+ARG BUILD_IMAGE
+ARG RUN_IMAGE
+
 # 编译镜像
-FROM golang:1.15-alpine as build
+FROM ${BUILD_IMAGE} as build
 
 ENV ROOT_DIR=/build
 WORKDIR /build
@@ -29,7 +32,7 @@ RUN sed -i 's/dl-cdn.alpinelinux.org/mirrors.aliyun.com/g' /etc/apk/repositories
 RUN make build-in-docker
 
 # 运行镜像
-FROM alpine:latest
+FROM ${RUN_IMAGE}
 
 WORKDIR /root/
 
