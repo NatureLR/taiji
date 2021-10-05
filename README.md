@@ -32,8 +32,7 @@ taiji init <文件类型> --mod=<模块名字>
 
 ### Dockerfile
 
-采用多阶编译,默认使用编译镜像使用`golang:1.15-alpine`,运行镜像为`alpine:latest`,可自行替换私有仓库
-镜像中修改时区为国内，以及镜像源替换为国内的命令
+采用多阶编译,镜像中修改时区为国内，以及镜像源替换为国内的命令
 
 ### Makefile
 
@@ -45,24 +44,4 @@ taiji init <文件类型> --mod=<模块名字>
 
 * 使用`git describe --tags --always --dirty="-dev"`替代if判断来生成自动生成版本号
 
-* deb包的支持自动生成
-
-* 多平台支持
-
-* 参数考虑，go的版本(GOVERSION),架构(ARCH),系统(OS),docker的运行的版本,docker仓库(docker repo）
-
-* 生成文件格式改为下面的
-
-```text
-artifacts
-├── arm
-│   ├── deb
-│   └── rpm
-├── bin
-│   └── test
-└── x86_64
-    ├── deb
-    │   └── test.deb
-    └── rpm
-        └── test.rpm
-```
+* 多平台支持,本地直接生成已经是实现，docker，rpm,deb考虑通过buildkit实现
