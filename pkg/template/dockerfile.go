@@ -27,7 +27,7 @@ RUN sed -i 's/dl-cdn.alpinelinux.org/mirrors.aliyun.com/g' /etc/apk/repositories
     apk add git
 
 # 国内使用的goproxy
-#ENV GOPROXY=https://goproxy.cn
+#ENV GOPROXY=https://goproxy.cn,https://mirrors.aliyun.com/goproxy/,https://goproxy.io,direct
 
 RUN make build-in-docker
 
