@@ -7,7 +7,7 @@ func init() {
 // Dockerfile 模版
 const Dockerfile = `# 编译镜像 golang:x.y.z-alpine3.13
 ARG BUILD_IMAGE=1.17
-ARG RUN_IMAGE=alpine3
+ARG RUN_IMAGE=alpine:3
 
 # 编译镜像
 FROM ${BUILD_IMAGE} as build
