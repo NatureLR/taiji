@@ -94,7 +94,7 @@ endif
 # go 参数
 GOOS       ?= $(shell go env GOOS)
 GOARCH     ?= $(shell go env GOARCH)
-GOVERSION  ?= 1.17.1
+GOVERSION  ?= 1.17.3
 
 # 目录
 ROOT_DIR   := $(realpath $(CURDIR))
