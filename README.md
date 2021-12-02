@@ -40,8 +40,6 @@ taiji init <文件类型> --mod=<模块名字>
 
 ## TODO
 
-* 使用embed来动态的载入模板文件
-
 * 使用`git describe --tags --always --dirty="-dev"`替代if判断来生成自动生成版本号
 
 * 多平台支持,本地直接生成已经是实现，docker，rpm,deb考虑通过buildkit实现

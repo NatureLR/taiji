@@ -60,7 +60,7 @@ func init() {
 	cobra.OnInitialize(initConfig)
 
 	//在这里，您将定义标志和配置设置。Cobra支持持久性标志，如果在这里定义的话，这里的配置是全局的。
-	rootCmd.PersistentFlags().StringVar(&cfgFile, "config", "", "config file (default is $HOME/{{.project}}.yaml)")
+	rootCmd.PersistentFlags().StringVarP(&cfgFile, "config", "c", "config", "config file")
 }
 
 // initConfig 读取配置文件和环境变量
