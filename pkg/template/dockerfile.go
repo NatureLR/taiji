@@ -6,8 +6,8 @@ func init() {
 
 // Dockerfile 模版
 const Dockerfile = `# 编译镜像 golang:x.y.z-alpine3.13
-ARG BUILD_IMAGE
-ARG RUN_IMAGE
+ARG BUILD_IMAGE=golang:1.17.3-alpine3.15
+ARG RUN_IMAGE=alpine:3
 
 # 编译镜像
 FROM ${BUILD_IMAGE} as build
@@ -27,7 +27,7 @@ RUN sed -i 's/dl-cdn.alpinelinux.org/mirrors.aliyun.com/g' /etc/apk/repositories
     apk add git
 
 # 国内使用的goproxy
-#ENV GOPROXY=https://goproxy.cn
+#ENV GOPROXY=https://goproxy.cn,https://mirrors.aliyun.com/goproxy/,https://goproxy.io,direct
 
 RUN make build-in-docker
 
