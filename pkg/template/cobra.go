@@ -19,8 +19,7 @@ func main() {
 `
 
 // RootGo corba的roog.go模板
-const RootGo = `
-package cmd
+const RootGo = `package cmd
 
 import (
 	"fmt"
@@ -28,8 +27,8 @@ import (
 	"path/filepath"
 	"strings"
 
-	"{{.importPath}}/pkg/versions"
 	homedir "github.com/mitchellh/go-homedir"
+	"{{.importPath}}/pkg/versions"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
 )
