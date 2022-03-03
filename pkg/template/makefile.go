@@ -19,6 +19,14 @@ help: ## 显示make帮助
 clean: ## 清理编译输出
 	@rm -rf $(OUTPUT_DIR)
 
+.PHONY: swag
+swag: ## 生成swagger文档
+	@swag init --parseDependency --parseInternal
+	
+.PHONY: doc
+doc: swag ## 生成swagger文档和
+	@go run . doc
+
 ##@ Build
 
 .PHONY: build
