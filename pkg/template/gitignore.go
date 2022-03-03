@@ -8,7 +8,6 @@ func init() {
 const Gitignore = `{{.project}}
 .vscode
 bin/
-build/
 .DS_Store
 artifacts/
 `
