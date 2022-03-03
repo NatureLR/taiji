@@ -15,7 +15,7 @@ stages:
   - build
   - deploy
 
-# 所有stage脚本之前都会执行，用来定义一些要用的变量
+# 所有stage脚本之前都会执行,用来定义一些要用的变量
 before_script:
   - echo "$CI_JOB_NAME由$GITLAB_USER_NAME($GITLAB_USER_ID)"触发
   - echo ====================================before_script开始执行=========================================================== >/dev/null

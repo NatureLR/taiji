@@ -9,19 +9,23 @@ func init() {
 const Makefile = `# 主文件
 include ./build/common.mk
 
+##@ General
+
+.PHONY: help
+help: ## 显示make帮助
+	@awk 'BEGIN {FS = ":.*##"; printf "\nUsage:\n  make \033[36m<target>\033[0m\n"} /^[a-zA-Z_0-9-]+:.*?##/ { printf "  \033[36m%-15s\033[0m %s\n", $$1, $$2 } /^##@/ { printf "\n\033[1m%s\033[0m\n", substr($$0, 5) } ' $(MAKEFILE_LIST)
+
+.PHONY: clean
+clean: ## 清理编译输出
+	@rm -rf $(OUTPUT_DIR)
+
+##@ Build
+
 .PHONY: build
 build: ## 本地编译当前系统和架构
 	@echo $(GREEN)编译$(GOOS)/$(GOARCH)
 	@$(BUILD)
 	@cp $(GO_OUTPUT) $(BIN_DIR)/$(PROJECT)
-
-.PHONY: install
-install: build ## 安装到系统PATH
-	@cp $(GO_OUTPUT) $(INSTALL_DIR)/$(PROJECT)
-
-.PHONY: uninstall
-uninstall: ## 卸载安装
-	@rm -rf $(INSTALL_DIR)/$(PROJECT)
 
 .PHONY: run
 run: ## 直接运行不编译
@@ -35,24 +39,27 @@ build-all: ## 多平台多架构
 		done \
 	done
 
-all: build-all docker tgz rpm deb ## 编译所有
+.PHONY: build-in-docker
+build-in-docker: ## 在docker里的编译选项
+	@CGO_ENABLED=0 go build -ldflags $(LDFLAG) $(ROOT_DIR)
 
-.PHONY: help
-help: ## 显示make的目标
-	@awk 'BEGIN {FS = ":.*?## "} /^[a-zA-Z_-]+:.*?## / {sub("\\\\n",sprintf("\n%22c"," "), $$2);printf " \033[36m%-20s\033[0m  %s\n", $$1, $$2}' $(MAKEFILE_LIST)
+all: build-all docker tgz rpm deb ## 编译打包所有
 
-.PHONY: clean
-clean: ## 清理编译输出
-	rm -rf $(OUTPUT_DIR)
+##@ Deploy
+.PHONY: install
+install: build ## 安装到系统PATH
+	@cp $(GO_OUTPUT) /usr/local/bin/$(PROJECT)
+
+.PHONY: uninstall
+uninstall: ## 卸载安装
+	@rm -rf /usr/local/bin/$(PROJECT)
+
+##@ Packag
 
 .PHONY: docker
 docker: ## 编译docker镜像
 	@echo $(GREEN)构建docker镜像
 	@$(DOCKER_BUILD)
-
-.PHONY: build-in-docker
-build-in-docker: ## 在docker里的编译选项
-	@CGO_ENABLED=0 go build -ldflags $(LDFLAG) $(ROOT_DIR)
 
 .PHONY: tgz
 tgz: ## 打包为tar包
@@ -60,7 +67,7 @@ tgz: ## 打包为tar包
 	@$(TGZ)
 
 .PHONY: rpm
-rpm:
+rpm: ## 打包伟rpm包
 	@echo $(GREEN)打包rpm
 	@mkdir -p $(RPM_DIR)/RPMS $(RPM_DIR)/SRPMS
 	@$(CHECK_TGZ)
@@ -68,7 +75,7 @@ rpm:
 	@$(RPM_DOCKER_RUN)
 
 .PHONY: deb
-deb:
+deb: ## 打包为deb包
 	@echo $(GREEN)打包deb
 	@mkdir -p $(DEB_DIR)
 	@$(CHECK_TGZ)
