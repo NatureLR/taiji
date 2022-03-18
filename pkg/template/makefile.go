@@ -109,7 +109,7 @@ endif
 # go 参数
 GOOS       ?= $(shell go env GOOS)
 GOARCH     ?= $(shell go env GOARCH)
-GOVERSION  ?= 1.17.3
+GOVERSION  ?= 1.18
 
 # 目录
 ROOT_DIR   := $(realpath $(CURDIR))
@@ -148,8 +148,8 @@ CHECK_TGZ := if [ ! -f "$(TGZ_DIR)/$(PROJECT).tar.gz" ]; then echo tgz文件不�
 # docker
 GO_IMAGE         ?= golang:$(GOVERSION)-buster
 # 产生镜像时用于运行的镜像
-GO_RUN_IMAGE     ?= alpine:3.13
-GO_BUILD_IMAGE   ?= golang:$(GOVERSION)-alpine3.13
+GO_RUN_IMAGE     ?= alpine:latest
+GO_BUILD_IMAGE   ?= golang:$(GOVERSION)-alpine
 GO_BASE_IMAGE    ?= golang:$(GOVERSION)-buster
 RPM_BUILD_IMAGE  ?= centos:7
 DEB_BUILD_IMAGE  ?= debian:buster
