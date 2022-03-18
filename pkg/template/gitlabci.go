@@ -5,8 +5,7 @@ func init() {
 }
 
 // GitlabCI 文件模板
-const GitlabCI = `
-# 定义全局变量
+const GitlabCI = `# 定义全局变量
 variables:
   DOCKER_REGISTRY_URL: "$REGISTRY"
 
@@ -36,13 +35,15 @@ before_script:
   - echo ====================================before_script执行完毕=========================================================== >/dev/null
 
 # 定义每个阶段的按钮
-build_image:
+image:
   # 绑定的stage
   stage: build
   # 只在那些分支上生效
-  #only:
-  #  - master
-  #  - tags
+  only:
+    - tags
+    - master
+    - dev
+    
   # 要用到的镜像dokcer in docker
   #image: docker:git
   # 加入的服务
@@ -65,7 +66,23 @@ build_image:
     - echo "The build is sucessful,The image is $IMAGE_TAG"
     - echo "The build is sucessful,The image is $IMAGE_TAG_LATEST"
 
-deploy:
+binary:
+  stage: build
+  when: manual
+  allow_failure: true
+  image: golang:1.17
+  only:
+    - tags
+    - master
+    - dev
+  artifacts:
+    paths:
+      - ./artifacts
+  script:
+    - make all
+
+# 发布模板
+.deploy:
   stage: deploy 
   when: manual
   allow_failure: true

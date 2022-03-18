@@ -46,7 +46,7 @@ Section: unknown
 Priority: optional
 Maintainer: naturelr naturelr@qq.com
 Build-Depends: go
-Homepage: www.baidu.com
+Homepage: https://github.com/NatureLR/taiji
 Description: 打包测试
 `
 const DEBDBUILD = `#!/usr/bin/env bash
@@ -62,7 +62,7 @@ cp /data/artifacts/tgz/$PROJECT.tar.gz .
 cp -r /data/build/deb/common/* ~/debbuild/DEBIAN/
 
 tar -xzf $PROJECT.tar.gz 
-make -C $PROJECT 
+make -C $PROJECT build
 
 cp $PROJECT/artifacts/bin/$PROJECT /root/debbuild/usr/local/bin
 
