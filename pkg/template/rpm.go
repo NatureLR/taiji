@@ -25,8 +25,8 @@ Summary:        {{.ShortDescribe}}
 
 Group:          Application/WebServer
 License:        Apache 2.0
-URL:            http://www.baidu.com
-Source0:        %{name}.tar.gz
+URL:            https://github.com/NatureLR/taiji
+Source0:        %{name}-%{_version}.tar.gz
 
 # 构建依赖
 BuildRequires:  git

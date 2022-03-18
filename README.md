@@ -38,6 +38,30 @@ taiji init <文件类型> --mod=<模块名字>
 
 在编译的时候注入版本信息到go文件中,如果有tag则为tag版本没有则为提交次数和hash,提供常用系统下的交编译命令,去除了字符链接缩小体积
 
+### 产物
+
+```text
+artifacts
+├── bin
+│   ├── test
+│   ├── test-1.8f66f5e-darwin-amd64
+│   ├── test-1.8f66f5e-darwin-arm64
+│   ├── test-1.8f66f5e-linux-amd64
+│   ├── test-1.8f66f5e-linux-arm64
+│   ├── test-1.8f66f5e-windows-amd64.exe
+│   └── test-1.8f66f5e-windows-arm64.exe
+├── deb
+│   └── test-1.8f66f5e-arm64.deb
+├── rpm
+│   ├── RPMS
+│   │   └── aarch64
+│   │       └── test-1.8f66f5e-1.el7.aarch64.rpm
+│   └── SRPMS
+│       └── test-1.8f66f5e-1.el7.src.rpm
+└── tgz
+    └── test-1.8f66f5e.tar.gz
+```
+
 ## TODO
 
 * 使用`git describe --tags --always --dirty="-dev"`替代if判断来生成自动生成版本号

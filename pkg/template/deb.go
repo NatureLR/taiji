@@ -58,10 +58,10 @@ ARCH=$(dpkg --print-architecture)
 
 mkdir -p ~/debbuild/DEBIAN
 mkdir -p ~/debbuild/usr/local/bin
-cp /data/artifacts/tgz/$PROJECT.tar.gz .
+cp /data/artifacts/tgz/$PROJECT-$VERSION.tar.gz .
 cp -r /data/build/deb/common/* ~/debbuild/DEBIAN/
 
-tar -xzf $PROJECT.tar.gz 
+tar -xzf $PROJECT-$VERSION.tar.gz 
 make -C $PROJECT build
 
 cp $PROJECT/artifacts/bin/$PROJECT /root/debbuild/usr/local/bin
