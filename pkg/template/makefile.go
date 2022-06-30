@@ -126,7 +126,7 @@ PRJVER     := $(PROJECT)-$(VERSION)
 
 # go 注入参数
 GO_PATH      := $(shell cat $(ROOT_DIR)/go.mod |grep module |cut -b 8-)
-X_VERSION    := -X '$(GO_PATH)/pkg/versions.xVersion=$(VER)'
+X_VERSION    := -X '$(GO_PATH)/pkg/versions.xVersion=$(VERSION)'
 X_GIT_COMMIT := -X '$(GO_PATH)/pkg/versions.xGitCommit=$$(git rev-parse HEAD)'
 X_BUILT      := -X '$(GO_PATH)/pkg/versions.xBuilt=$$(date "+%Y-%m-%d %H:%M:%S")'
 LDFLAG       := "-s -w $(X_VERSION) $(X_GIT_COMMIT) $(X_BUILT)"
