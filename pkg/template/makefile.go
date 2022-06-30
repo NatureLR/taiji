@@ -122,16 +122,17 @@ RPM_DIR    := $(OUTPUT_DIR)/rpm
 DEB_DIR    := $(OUTPUT_DIR)/deb
 TGZ_DIR    := $(OUTPUT_DIR)/tgz
 RPMBUILD   := /root/rpmbuild
+PRJVER     := $(PROJECT)-$(VERSION)
 
 # go 注入参数
 GO_PATH      := $(shell cat $(ROOT_DIR)/go.mod |grep module |cut -b 8-)
-X_VERSION    := -X '$(GO_PATH)/pkg/versions.xVersion=$(VER)'
+X_VERSION    := -X '$(GO_PATH)/pkg/versions.xVersion=$(VERSION)'
 X_GIT_COMMIT := -X '$(GO_PATH)/pkg/versions.xGitCommit=$$(git rev-parse HEAD)'
 X_BUILT      := -X '$(GO_PATH)/pkg/versions.xBuilt=$$(date "+%Y-%m-%d %H:%M:%S")'
 LDFLAG       := "-s -w $(X_VERSION) $(X_GIT_COMMIT) $(X_BUILT)"
-GO_OUTPUT    := $(BIN_DIR)/$(PROJECT)-$(VERSION)-$(GOOS)-$(GOARCH) 
+GO_OUTPUT    := $(BIN_DIR)/$(PRJVER)-$(GOOS)-$(GOARCH)
 ifeq ($(GOOS),windows)
-GO_OUTPUT    := $(BIN_DIR)/$(PROJECT)-$(VERSION)-$(GOOS)-$(GOARCH).exe
+GO_OUTPUT    := $(BIN_DIR)/$(PRJVER)-$(GOOS)-$(GOARCH).exe
 endif
 BUILD        := go build -ldflags $(LDFLAG) -o $(GO_OUTPUT) $(ROOT_DIR)
 
@@ -141,9 +142,9 @@ RPM_BUILD := rpmbuild \
 	--define '_version $(VERSION)' \
 	SPECS/$(PROJECT).spec
 
-TGZ_CMD   :=tar --exclude $(PROJECT)/$(OUTPUT) -czf $(PROJECT).tar.gz $(PROJECT)
-TGZ       := mkdir -p $(TGZ_DIR) && cd $(CURDIR)/../ && $(TGZ_CMD) &&  mv $(PROJECT).tar.gz $(TGZ_DIR)
-CHECK_TGZ := if [ ! -f "$(TGZ_DIR)/$(PROJECT).tar.gz" ]; then echo tgz文件不存在创建tgz包;$(MAKE) tgz;fi
+TGZ_CMD   :=tar --exclude $(PROJECT)/$(OUTPUT) -czf $(PRJVER).tar.gz $(PROJECT)
+TGZ       := mkdir -p $(TGZ_DIR) && cd $(CURDIR)/../ && $(TGZ_CMD) &&  mv $(PRJVER).tar.gz $(TGZ_DIR)
+CHECK_TGZ := if [ ! -f "$(TGZ_DIR)/$(PRJVER).tar.gz" ]; then echo tgz文件不存在创建tgz包;$(MAKE) tgz;fi
 
 # docker
 GO_IMAGE         ?= golang:$(GOVERSION)-buster
