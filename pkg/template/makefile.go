@@ -2,7 +2,7 @@ package template
 
 func init() {
 	Default.Add("makefile", Makefile, "Makefile")
-	Default.Add("BUILDMAKEFILE", BUILDMAKEFILE, "build/common.mk")
+	Default.Add("buildmakefile", BuildMakefile, "build/common.mk")
 }
 
 // Makefile 模板
@@ -95,8 +95,8 @@ deb: ## 打包为deb包
 
 `
 
-// BUILDMAKEFILE build目录下的makefile需要和根目录下的makefile合并
-const BUILDMAKEFILE = `# 全局配置
+// BuildMakefile build目录下的makefile需要和根目录下的makefile合并
+const BuildMakefile = `# 全局配置
 PROJECT := {{.project}}
 ARCHS   := amd64 arm64
 OSS     := linux windows darwin
@@ -112,7 +112,7 @@ endif
 # go 参数
 GOOS       ?= $(shell go env GOOS)
 GOARCH     ?= $(shell go env GOARCH)
-GOVERSION  ?= 1.18
+GOVERSION  ?= 1.19
 
 # 目录
 ROOT_DIR   := $(realpath $(CURDIR))
