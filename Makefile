@@ -7,7 +7,7 @@ AQUA   := $(shell tput -Txterm setaf 6)
 WHITE  := $(shell tput -Txterm setaf 7)
 RESET  := $(shell tput -Txterm sgr0)
 
-# 判断当前commit是否有tag如果有tag则显示tag没有则显示 commit次数.哈希
+# 判断当前commit是否有tag如果有tag则显示tag没有则显示 commit次数.哈希
 VER = $(shell echo "$(shell git log --oneline |wc -l).$(shell git log -n1 --pretty=format:%h)" | sed 's/ //g')
 # 用于判断当前的提前是否有tag
 TAG = $(shell git log -n1 --pretty=format:%h |git tag --contains)

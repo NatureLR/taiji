@@ -5,6 +5,4 @@ func init() {
 }
 
 // Readme 文档模板
-const Readme = `
-# {{.project}}
-`
+const Readme = `# {{.project}}`

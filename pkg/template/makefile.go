@@ -2,7 +2,7 @@ package template
 
 func init() {
 	Default.Add("makefile", Makefile, "Makefile")
-	Default.Add("BUILDMAKEFILE", BUILDMAKEFILE, "build/common.mk")
+	Default.Add("buildmakefile", BuildMakefile, "build/common.mk")
 }
 
 // Makefile 模板
@@ -68,6 +68,9 @@ uninstall: ## 卸载安装
 docker: ## 编译docker镜像
 	@echo $(GREEN)构建docker镜像
 	@$(DOCKER_BUILD)
+	@echo $(YELLOW)镜像地址:
+	@echo $(IMAGE_ADDR)
+	@echo $(IMAGE_ADDR_LATEST)
 
 .PHONY: tgz
 tgz: ## 打包为tar包
@@ -92,8 +95,8 @@ deb: ## 打包为deb包
 
 `
 
-// BUILDMAKEFILE build目录下的makefile需要和根目录下的makefile合并
-const BUILDMAKEFILE = `# 全局配置
+// BuildMakefile build目录下的makefile需要和根目录下的makefile合并
+const BuildMakefile = `# 全局配置
 PROJECT := {{.project}}
 ARCHS   := amd64 arm64
 OSS     := linux windows darwin
@@ -109,7 +112,7 @@ endif
 # go 参数
 GOOS       ?= $(shell go env GOOS)
 GOARCH     ?= $(shell go env GOARCH)
-GOVERSION  ?= 1.18
+GOVERSION  ?= 1.19
 
 # 目录
 ROOT_DIR   := $(realpath $(CURDIR))
@@ -154,10 +157,19 @@ GO_BUILD_IMAGE   ?= golang:$(GOVERSION)-alpine
 GO_BASE_IMAGE    ?= golang:$(GOVERSION)-buster
 RPM_BUILD_IMAGE  ?= centos:7
 DEB_BUILD_IMAGE  ?= debian:buster
-DOCKER_REPO      ?= hub.docker.com
+
+# 自己的仓库
+DOCKER_REPO       = 
+IMAGE_ADDR        = $(DOCKER_REPO)/$(PROJECT):$(VERSION)
+IMAGE_ADDR_LATEST = $(DOCKER_REPO)/$(PROJECT):latest
+ifeq ($(DOCKER_REPO),)
+IMAGE_ADDR        = $(PROJECT):$(VERSION)
+IMAGE_ADDR_LATEST = $(PROJECT):latest
+endif
+
 DOCKER_BUILD     := docker build \
-	-t $(PROJECT):latest \
-	-t $(PROJECT):$(VERSION) \
+	-t $(DOCKER_REPO)/$(PROJECT):latest \
+	-t $(DOCKER_REPO)/$(PROJECT):$(VERSION) \
 	--build-arg RUN_IMAGE=$(GO_RUN_IMAGE) \
 	--build-arg BUILD_IMAGE=$(GO_BUILD_IMAGE) \
 	-f $(BUILD_DIR)/Dockerfile \
