@@ -22,13 +22,13 @@ taiji init <文件类型> --mod=<模块名字>
 配置使用[viper](https://github.com/spf13/viper),读取配置文件名字为`config.yaml`;
 默认会读取以下目录
 
-* 程序的根目录
+1. 程序的根目录
 
-* 程序下的config目录
+2. 程序下的config目录
 
-* /etc/<程序的名字>目录
+3. /etc/<程序的名字>目录
 
-* home目录中的config.yaml
+4. 用户配置目录
 
 ### Dockerfile
 
