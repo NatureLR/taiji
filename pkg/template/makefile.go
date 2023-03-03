@@ -112,7 +112,7 @@ endif
 # go 参数
 GOOS       ?= $(shell go env GOOS)
 GOARCH     ?= $(shell go env GOARCH)
-GOVERSION  ?= 1.19
+GOVERSION  ?= 1.20
 
 # 目录
 ROOT_DIR   := $(realpath $(CURDIR))
@@ -168,8 +168,8 @@ IMAGE_ADDR_LATEST = $(PROJECT):latest
 endif
 
 DOCKER_BUILD     := docker build \
-	-t $(DOCKER_REPO)/$(PROJECT):latest \
-	-t $(DOCKER_REPO)/$(PROJECT):$(VERSION) \
+	-t $(IMAGE_ADDR) \
+	-t $(IMAGE_ADDR_LATEST) \
 	--build-arg RUN_IMAGE=$(GO_RUN_IMAGE) \
 	--build-arg BUILD_IMAGE=$(GO_BUILD_IMAGE) \
 	-f $(BUILD_DIR)/Dockerfile \

@@ -6,7 +6,7 @@ func init() {
 
 // Dockerfile 模版
 const Dockerfile = `# 编译镜像 golang:x.y.z-alpine3.13
-ARG BUILD_IMAGE=golang:1.18-alpine
+ARG BUILD_IMAGE=golang:1.20-alpine
 ARG RUN_IMAGE=alpine:3
 
 # 编译镜像
@@ -42,7 +42,7 @@ WORKDIR /root/
 #    ln -s /usr/share/zoneinfo/Asia/Shanghai /etc/localtime
 
 # 添加nsswitch.conf，如不添加hosts文件无效
-RUN [ ! -e /etc/nsswitch.conf ] && echo 'hosts: files dns' > /etc/nsswitch.conf
+# RUN [ ! -e /etc/nsswitch.conf ] && echo 'hosts: files dns' > /etc/nsswitch.conf
 
 COPY --from=build /build/{{.project}} .
 
