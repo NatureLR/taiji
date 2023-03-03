@@ -72,10 +72,16 @@ mkdir -p ~/debbuild/usr/lib/systemd/system/
 cp /data/build/systemd/* ~/debbuild/usr/lib/systemd/system/
 fi
 
+VER=$VERSION
+if [[ $VERSION =~ v[0-9]+\.[0-9]+\.[0-9]+ ]]; then
+  VER=$(echo "$VERSION" | sed 's/v//')
+  echo "$VER"
+fi
+
 echo Source: $PROJECT >> ~/debbuild/DEBIAN/control
 echo Package: $PROJECT >> ~/debbuild/DEBIAN/control
-echo Version: $VERSION >> ~/debbuild/DEBIAN/control
-echo Standards-Version: $VERSION >> ~/debbuild/DEBIAN/control
+echo Version: $VER >> ~/debbuild/DEBIAN/control
+echo Standards-Version: $VER >> ~/debbuild/DEBIAN/control
 echo Architecture: $ARCH >> ~/debbuild/DEBIAN/control
 
 dpkg-deb --build /root/debbuild/ $PROJECT-$VERSION-$ARCH.deb

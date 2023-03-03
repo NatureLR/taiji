@@ -1,5 +1,4 @@
-make build
-make install
+rm -rf test
 mkdir test
 cd test
 taiji  init --mod=github.com/naturelr/test 
