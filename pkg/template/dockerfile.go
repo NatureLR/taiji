@@ -5,8 +5,8 @@ func init() {
 }
 
 // Dockerfile 模版
-const Dockerfile = `# 编译镜像 golang:x.y.z-alpine3.13
-ARG BUILD_IMAGE=golang:1.21-alpine
+const Dockerfile = `# 编译镜像 golang:x.y-alpine
+ARG BUILD_IMAGE=golang:{{.GoVersion}}-alpine
 ARG RUN_IMAGE=alpine:3
 
 # 编译镜像

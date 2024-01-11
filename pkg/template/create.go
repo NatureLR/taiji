@@ -1,9 +1,12 @@
 package template
 
 import (
+	"fmt"
 	"log"
 	"os"
 	"path/filepath"
+	"regexp"
+	"runtime"
 	"text/template"
 
 	"github.com/naturelr/taiji/pkg/tools"
@@ -32,12 +35,22 @@ func Create(c CreateTpl, mod string) {
 	tmpl, err := template.New("goProject").Parse(c.Content())
 	tools.CheckErr(err)
 
+	goversion := runtime.Version()
+	versionRegex := regexp.MustCompile(`go(\d+\.\d+)`)
+	matches := versionRegex.FindStringSubmatch(goversion)
+	if len(matches) >= 2 {
+		goversion = matches[1]
+	} else {
+		fmt.Println("Failed to extract version.")
+	}
+
 	err = tmpl.Execute(f, map[string]string{
 		"project":       peoject,
 		"importPath":    impotPath,
 		"backquoted":    "`",
 		"ShortDescribe": versions.ShortDescribe,
 		"LongDescribe":  versions.LongDescribe,
+		"GoVersion":     goversion,
 	})
 	tools.CheckErr(err)
 }
