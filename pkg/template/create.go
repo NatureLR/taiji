@@ -45,12 +45,14 @@ func Create(c CreateTpl, mod string) {
 	}
 
 	err = tmpl.Execute(f, map[string]string{
-		"project":       peoject,
-		"importPath":    impotPath,
-		"backquoted":    "`",
-		"ShortDescribe": versions.ShortDescribe,
-		"LongDescribe":  versions.LongDescribe,
-		"GoVersion":     goversion,
+		"project":          peoject,
+		"importPath":       impotPath,
+		"backquoted":       "`",
+		"ShortDescribe":    versions.ShortDescribe,
+		"LongDescribe":     versions.LongDescribe,
+		"GoVersion":        goversion,
+		"LeftDoubleBrace":  "{{", // {{
+		"RightDoubleBrace": "}}", // }}
 	})
 	tools.CheckErr(err)
 }
