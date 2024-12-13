@@ -63,6 +63,10 @@ func init() {
 
 // initConfig 读取配置文件和环境变量
 func initConfig() {
+	if err := viper.BindPFlags(rootCmd.Flags()); err != nil {
+		klog.ErrorS(err, "Failed bind flags")
+	}
+
 	self := filepath.Base(os.Args[0])
 	if cfgFile != "" {
 		// 从flag读取文件
