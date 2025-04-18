@@ -1,7 +1,7 @@
 package template
 
 func init() {
-	Default.Add("action", GITHUBACTION, ".gitbhub/workflows/build-image.yaml")
+	Default.Add("action", GITHUBACTION, ".github/workflows/build-image.yaml")
 }
 
 const GITHUBACTION = `name: Docker Image CI
