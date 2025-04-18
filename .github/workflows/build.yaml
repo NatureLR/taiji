@@ -14,6 +14,9 @@ jobs:
       matrix:
         os: [linux, windows, darwin] # 支持的操作系统
         arch: [amd64, arm64]         # 支持的架构
+        exclude:
+          - os: windows
+            arch: arm64 # 排除 windows/arm64 组合
     steps:
       # Step 1: 检出代码
       - name: Checkout code
@@ -40,7 +43,7 @@ jobs:
           go build -o dist/$output_name . # 替换为你的主程序路径
 
       # Step 4: 上传所有构建产物
-      - name: Upload Binaries
+      - name: Upload Binaries ${{ matrix.os }}/${{ matrix.arch }}
         uses: actions/upload-artifact@v4
         with:
           name: go-binaries
