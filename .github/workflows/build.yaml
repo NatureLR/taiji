@@ -1,8 +1,11 @@
 name: build-go-binary
 
 on:
-  release:
-    types: [created] # 表示在创建新的 Release 时触发
+  push:
+    tags:
+      - 'v*' # 触发条件为v开头的tags
+    branches:
+      - master # 触发分支
 
 jobs:
   build-go-binary:
