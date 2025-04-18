@@ -46,5 +46,5 @@ jobs:
       - name: Upload Binaries ${{ matrix.os }}/${{ matrix.arch }}
         uses: actions/upload-artifact@v4
         with:
-          name: go-binaries
+          name: ${{ env.OUTPUT_NAME }-${{ matrix.os }}-${{ matrix.arch }}
           path: dist/
