@@ -1,29 +1,47 @@
-name: build-go-binary
+name: Build Go Program for Multiple Platforms
 
 on:
   push:
     tags:
-      - 'v*' # 触发条件为v开头的tags
-    branches:
-      - master # 触发分支
-
+      - 'v*' # 仅在推送标签时触发
+env:
+  OUTPUT_NAME: taiji
+  
 jobs:
-  build-go-binary:
+  build:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        goos: [linux, windows, darwin] # 需要打包的系统
-        goarch: [amd64, arm64] # 需要打包的架构
-        exclude: # 排除某些平台和架构
-          - goarch: arm64
-            goos: windows
+        os: [linux, windows, darwin] # 支持的操作系统
+        arch: [amd64, arm64]         # 支持的架构
     steps:
-      - uses: actions/checkout@v3
-      - uses: wangyoucao577/go-release-action@v1.30
+      # Step 1: 检出代码
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      # Step 2: 设置 Go 环境
+      - name: Setup Go
+        uses: actions/setup-go@v4
         with:
-          github_token: ${{ secrets.GITHUB_TOKEN }} # 一个默认的变量，用来实现往 Release 中添加文件
-          goos: ${{ matrix.goos }}
-          goarch: ${{ matrix.goarch }}
-          goversion: 1.24 # 可以指定编译使用的 Golang 版本
-          binary_name: "taiji" # 可以指定二进制文件的名称
-          #extra_files: README.md config.dev.json # 需要包含的额外文件
+          go-version: 1.20 # 替换为你的 Go 版本
+
+      # Step 3: 编译多个平台和架构的二进制
+      - name: Cross-compile Go binary
+        env:
+          GOOS: ${{ matrix.os }}
+          GOARCH: ${{ matrix.arch }}
+        run: |
+          mkdir -p dist
+          output_name=${{ env.OUTPUT_NAME }}-${{ matrix.os }}-${{ matrix.arch }}
+          if [ "${{ matrix.os }}" == "windows" ]; then
+            output_name="$output_name.exe"
+          fi
+          echo "Building $output_name for $GOOS/$GOARCH..."
+          go build -o dist/$output_name ./ # 替换为你的主程序路径
+
+      # Step 4: 上传所有构建产物
+      - name: Upload Binaries
+        uses: actions/upload-artifact@v3
+        with:
+          name: go-binaries
+          path: dist/
