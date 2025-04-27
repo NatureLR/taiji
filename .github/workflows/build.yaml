@@ -5,7 +5,7 @@ on:
     tags:
       - 'v*' # 仅在推送标签时触发
     branches:
-      - ci-test
+      - dev
 env:
   OUTPUT_NAME: taiji
   
