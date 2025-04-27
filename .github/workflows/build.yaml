@@ -4,6 +4,8 @@ on:
   push:
     tags:
       - 'v*' # 仅在推送标签时触发
+    branches:
+      - dev
 env:
   OUTPUT_NAME: taiji
   
