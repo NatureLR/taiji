@@ -5,7 +5,7 @@ on:
     tags:
       - 'v*' # 仅在推送标签时触发
     branches:
-      - dev
+      - ci-test
 env:
   OUTPUT_NAME: taiji
   
@@ -48,5 +48,5 @@ jobs:
       - name: Upload Binaries ${{ matrix.os }}/${{ matrix.arch }}
         uses: actions/upload-artifact@v4
         with:
-          name: "${{ env.OUTPUT_NAME }-${{ matrix.os }}-${{ matrix.arch }}"
+          name:  ${{ env.OUTPUT_NAME }}-${{ matrix.os }}-${{ matrix.arch }}
           path: dist/
