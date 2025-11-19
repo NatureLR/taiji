@@ -42,11 +42,12 @@ jobs:
             output_name="$output_name.exe"
           fi
           echo "Building $output_name for $GOOS/$GOARCH..."
-          go build -o dist/$output_name . # 替换为你的主程序路径
+          #go build -o dist/$output_name . # 替换为你的主程序路径
+          make
 
       # Step 4: 上传所有构建产物
       - name: Upload Binaries ${{ matrix.os }}/${{ matrix.arch }}
         uses: actions/upload-artifact@v4
         with:
           name:  ${{ env.OUTPUT_NAME }}-${{ matrix.os }}-${{ matrix.arch }}
-          path: dist/
+          path: bin/
