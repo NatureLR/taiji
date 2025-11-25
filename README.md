@@ -62,6 +62,21 @@ artifacts
     └── test-1.8f66f5e.tar.gz
 ```
 
+## 关系图
+
+```mermaid
+graph LR
+    action[github action] --> makefile
+    gitlab-ci[gitlab ci] --> makefile
+    cli[命令行] --> makefile
+    makefile-->dockerfile
+    makefile-->bin[二进制]
+    dockerfile-->rpm
+    dockerfile-->deb
+    dockerfile-->source[源码包]
+    dockerfile-->dockerimage[docker镜像]
+```
+
 ## TODO
 
 * 使用`git describe --tags --always --dirty="-dev"`替代if判断来生成自动生成版本号

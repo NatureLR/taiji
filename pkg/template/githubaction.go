@@ -26,8 +26,8 @@ jobs:
         run: | 
               if [ "${{ .LeftDoubleBrace }} github.event_name {{ .RightDoubleBrace }}" == "push" ]; then
                 if [ "${{ .LeftDoubleBrace }} startsWith(github.ref, 'refs/tags/') {{ .RightDoubleBrace }}" == "true" ]; then
-                  echo "Tag: ${{ .LeftDoubleBrace }} github.ref }}"
-                  echo "TAG_NAME=${{ .LeftDoubleBrace }} github.ref {{ .RightDoubleBrace }}" >> $GITHUB_ENV
+                  echo "Tag: ${{ .LeftDoubleBrace }} github.ref_name }}"
+                  echo "TAG_NAME=${{ .LeftDoubleBrace }} github.ref_name {{ .RightDoubleBrace }}" >> $GITHUB_ENV
                 else
                   short_commit_id=$(git rev-parse --short "${{ .LeftDoubleBrace }} github.sha {{ .RightDoubleBrace }}")
                   echo "Short Commit ID: $short_commit_id"
