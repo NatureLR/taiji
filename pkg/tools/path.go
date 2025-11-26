@@ -2,7 +2,6 @@ package tools
 
 import (
 	"bytes"
-	"io/ioutil"
 	"log"
 	"os"
 	"path/filepath"
@@ -56,7 +55,7 @@ func ModulePath(mod []byte) string {
 // ImportPath 如果有go.mod文件则使用go.mod
 // 判断在GOPATH中，如果是就使用GOPATH的路径，不是就需要指定mod
 func ImportPath(path string) string {
-	m, err := ioutil.ReadFile("go.mod")
+	m, err := os.ReadFile("go.mod")
 	if err == nil {
 		return ModulePath(m)
 	}
