@@ -100,13 +100,30 @@ const BuildMakefile = `# 全局配置
 PROJECT := {{.project}}
 ARCHS   := amd64 arm64
 OSS     := linux windows darwin
-# 判断当前commit是否有tag如果有tag则显示tag没有则显示 commit次数.哈希
-# 如果没有手动指定标签就使用自动生成的标签
-# git describe --tags --always --dirty="-dev"
-VERSION     = $(shell echo "$(shell git log --oneline |wc -l).$(shell git log -n1 --pretty=format:%h)" | sed 's/ //g')
-TAG         = $(shell git log -n1 --pretty=format:%h |git tag --contains)
+
+# 判断当前commit是否有tag如果有tag则显示tag没有则显示自动生成的tag
+# 版本号格式说明:
+# 如v0.1.1-dev.1.5.097ce20，表示最近的tag是v0.1.1，距离最近的tag是1个提交，一共有5个commit，commit hash是097ce20
+ZERO_TAG     := v0.0.0
+DIRTY        ?=dev
+# 距离最近的tag的提交数量
+SINCE_TAG    := $(shell echo $(shell git rev-list $(shell git describe --tags --abbrev=0)..HEAD --count))
+# 总的commit数量
+COUNT_COMMIT := $(shell git log --oneline |wc -l)
+# 最近的commit hash
+COMMIT_HASH  := $(shell git log -n1 --pretty=format:%h)
+COUNT_TAG	 := $(shell git tag --list |wc -l)
+# 最近的tag
+LAST_TAG     =  $(shell git describe --tags --always --dirty=-$(DIRTY))
+# 如果一个tag都没有则使用默认的tag
+ifeq ($(strip $(COUNT_TAG)),0)
+LAST_TAG     =  $(shell echo "$(ZERO_TAG)-$(DIRTY)")
+endif
+AUTO_VERSION =  $(shell echo "$(LAST_TAG).$(SINCE_TAG).$(COUNT_COMMIT).$(COMMIT_HASH)" | sed 's/ //g')
+VERSION      =  $(AUTO_VERSION)
+TAG          =  $(shell git log -n1 --pretty=format:%h |git tag --contains)
 ifneq ($(TAG),)
-VERSION     = $(shell git tag --sort=committerdate |tail -1)
+VERSION      =  $(shell git tag --sort=committerdate |tail -1)
 endif
 
 # go 参数
