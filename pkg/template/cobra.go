@@ -30,6 +30,7 @@ import (
 	"{{.importPath}}/pkg/versions"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
+	"k8s.io/klog/v2"
 )
 
 var cfgFile string
