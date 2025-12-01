@@ -6,8 +6,7 @@ func init() {
 }
 
 // MainGo main.go模板
-const MainGo = `
-package main
+const MainGo = `package main
 
 import (
 	"{{.importPath}}/cmd"

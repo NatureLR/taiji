@@ -18,6 +18,8 @@ func init() {
 const RPMSPEC = `# 构建rpm包的文件
 %global debug_package %{nil}
 
+%define _unitdir /usr/lib/systemd/system
+
 Name:           {{.project}}
 Version:        %{_version}
 Release:        1%{?dist}
@@ -86,17 +88,29 @@ ARG BUILD_IMAGE
 # 从此镜像中获取go
 FROM ${GO_IMAGE} AS golang
 
-FROM ${BUILD_IMAGE}
+FROM ${BUILD_IMAGE} AS builder
+
+ARG PROJECT
+ARG VERSION
 
 # 安装rpmbuild 工具
-RUN  yum install -y rpm-build rpmlint yum-utils rpmdevtools make git 
-RUN  rpmdev-setuptree
+RUN dnf install -y rpm-build rpmlint yum-utils rpmdevtools make git 
+RUN rpmdev-setuptree
 
 WORKDIR /root/rpmbuild
 
 # 从golang官方镜像中拷贝到centos镜像
-ENV PATH $PATH:/usr/local/go/bin:$GOPATH/bin
+ENV PATH=$PATH:/usr/local/go/bin:$GOPATH/bin
 COPY --from=golang /usr/local/go /usr/local/go
 
-ENTRYPOINT ["/bin/rpmbuild"]
+COPY ./artifacts/tgz/${PROJECT}-${VERSION}.tar.gz SOURCES/ 
+COPY ./build/rpm/${PROJECT}.spec SPECS/
+
+RUN rpmbuild -ba --define "_version ${VERSION}" SPECS/${PROJECT}.spec
+
+FROM scratch AS export
+
+COPY --from=builder /root/rpmbuild/RPMS ./RPMS
+COPY --from=builder /root/rpmbuild/SRPMS ./SRPMS
+
 `

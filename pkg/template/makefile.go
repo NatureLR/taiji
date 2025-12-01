@@ -33,7 +33,7 @@ doc: swag ## 生成swagger文档和
 build: ## 本地编译当前系统和架构
 	@echo $(GREEN)编译$(GOOS)/$(GOARCH)
 	@$(BUILD)
-	@cp $(GO_OUTPUT) $(BIN_DIR)/$(PROJECT)
+	@cp $(GO_OUTPUT) $(OUTPUT_BIN_DIR)/$(PROJECT)
 
 .PHONY: run
 run: ## 直接运行不编译
@@ -49,7 +49,7 @@ build-all: ## 多平台多架构
 
 .PHONY: build-in-docker
 build-in-docker: ## 在docker里的编译选项
-	@CGO_ENABLED=0 go build -ldflags $(LDFLAG) $(ROOT_DIR)
+	@CGO_ENABLED=0 go build -ldflags $(LDFLAG) -o $(PROJECT) $(ROOT_DIR)
 
 all: build-all docker tgz rpm deb ## 编译打包所有
 
@@ -80,15 +80,14 @@ tgz: ## 打包为tar包
 .PHONY: rpm
 rpm: ## 打包为rpm包
 	@echo $(GREEN)打包rpm
-	@mkdir -p $(RPM_DIR)/RPMS $(RPM_DIR)/SRPMS
+	@mkdir -p $(OUTPUT_RPM_DIR)/RPMS $(OUTPUT_RPM_DIR)/SRPMS
 	@$(CHECK_TGZ)
 	@$(RPM_DOCKER_BUILD)
-	@$(RPM_DOCKER_RUN)
 
 .PHONY: deb
 deb: ## 打包为deb包
 	@echo $(GREEN)打包deb
-	@mkdir -p $(DEB_DIR)
+	@mkdir -p $(OUTPUT_DEB_DIR)
 	@$(CHECK_TGZ)
 	@$(DEB_DOCKER_BUILD)
 	@$(DEB_DOCKER_RUN)
@@ -134,17 +133,17 @@ GOARCH     ?= $(shell go env GOARCH)
 GOVERSION  ?= {{.GoVersion}}
 
 # 目录
-ROOT_DIR   := $(realpath $(CURDIR))
-BUILD_DIR  := $(ROOT_DIR)/build
-INSTALL_DIR:= /usr/local/bin
-OUTPUT     := artifacts
-OUTPUT_DIR := $(ROOT_DIR)/$(OUTPUT)
-BIN_DIR    := $(OUTPUT_DIR)/bin
-RPM_DIR    := $(OUTPUT_DIR)/rpm
-DEB_DIR    := $(OUTPUT_DIR)/deb
-TGZ_DIR    := $(OUTPUT_DIR)/tgz
-RPMBUILD   := /root/rpmbuild
-PRJVER     := $(PROJECT)-$(VERSION)
+ROOT_DIR          := $(realpath $(CURDIR))
+BUILD_DIR         := $(ROOT_DIR)/build
+BUILD_RPM_DIR     := $(BUILD_DIR)/rpm
+INSTALL_DIR       := /usr/local/bin
+OUTPUT            := artifacts
+OUTPUT_DIR        := $(ROOT_DIR)/$(OUTPUT)
+OUTPUT_BIN_DIR    := $(OUTPUT_DIR)/bin
+OUTPUT_RPM_DIR    := $(OUTPUT_DIR)/rpm
+OUTPUT_DEB_DIR    := $(OUTPUT_DIR)/deb
+OUTPUT_TGZ_DIR    := $(OUTPUT_DIR)/tgz
+PRJVER            := $(PROJECT)-$(VERSION)
 
 # go 注入参数
 GO_PATH      := $(shell cat $(ROOT_DIR)/go.mod |grep module |cut -b 8-)
@@ -152,33 +151,28 @@ X_VERSION    := -X '$(GO_PATH)/pkg/versions.xVersion=$(VERSION)'
 X_GIT_COMMIT := -X '$(GO_PATH)/pkg/versions.xGitCommit=$$(git rev-parse HEAD)'
 X_BUILT      := -X '$(GO_PATH)/pkg/versions.xBuilt=$$(date "+%Y-%m-%d %H:%M:%S")'
 LDFLAG       := "-s -w $(X_VERSION) $(X_GIT_COMMIT) $(X_BUILT)"
-GO_OUTPUT    := $(BIN_DIR)/$(PRJVER)-$(GOOS)-$(GOARCH)
+GO_OUTPUT    := $(OUTPUT_BIN_DIR)/$(PRJVER)-$(GOOS)-$(GOARCH)
 ifeq ($(GOOS),windows)
-GO_OUTPUT    := $(BIN_DIR)/$(PRJVER)-$(GOOS)-$(GOARCH).exe
+GO_OUTPUT    := $(OUTPUT_BIN_DIR)/$(PRJVER)-$(GOOS)-$(GOARCH).exe
 endif
 BUILD        := go build -ldflags $(LDFLAG) -o $(GO_OUTPUT) $(ROOT_DIR)
 
-# RPM
-RPM_BUILD := rpmbuild \
-	-ba \
-	--define '_version $(VERSION)' \
-	SPECS/$(PROJECT).spec
-
-TGZ_CMD   :=tar --exclude $(PROJECT)/$(OUTPUT) -czf $(PRJVER).tar.gz $(PROJECT)
-TGZ       := mkdir -p $(TGZ_DIR) && cd $(CURDIR)/../ && $(TGZ_CMD) &&  mv $(PRJVER).tar.gz $(TGZ_DIR)
-CHECK_TGZ := if [ ! -f "$(TGZ_DIR)/$(PRJVER).tar.gz" ]; then echo tgz文件不存在创建tgz包;$(MAKE) tgz;fi
+TGZ_CMD   := tar --exclude $(PROJECT)/$(OUTPUT) -czf $(PRJVER).tar.gz $(PROJECT)
+TGZ       := mkdir -p $(OUTPUT_TGZ_DIR) && cd $(CURDIR)/../ && $(TGZ_CMD) &&  mv $(PRJVER).tar.gz $(OUTPUT_TGZ_DIR)
+CHECK_TGZ := if [ ! -f "$(OUTPUT_TGZ_DIR)/$(PRJVER).tar.gz" ]; then echo tgz文件不存在创建tgz包;$(MAKE) tgz;fi
 
 # docker
-GO_IMAGE         ?= golang:$(GOVERSION)-buster
+GO_IMAGE         ?= golang:$(GOVERSION)-trixie
 # 产生镜像时用于运行的镜像
 GO_RUN_IMAGE     ?= alpine:latest
 GO_BUILD_IMAGE   ?= golang:$(GOVERSION)-alpine
-GO_BASE_IMAGE    ?= golang:$(GOVERSION)-buster
-RPM_BUILD_IMAGE  ?= centos:7
-DEB_BUILD_IMAGE  ?= debian:buster
+GO_BASE_IMAGE    ?= golang:$(GOVERSION)
+RPM_BUILD_IMAGE  ?= rockylinux:9
+DEB_BUILD_IMAGE  ?= debian:trixie
+PLATFORM         ?= linux/amd64,linux/arm64
 
 # 自己的仓库
-DOCKER_REPO       = 
+DOCKER_REPO       = naturelr
 IMAGE_ADDR        = $(DOCKER_REPO)/$(PROJECT):$(VERSION)
 IMAGE_ADDR_LATEST = $(DOCKER_REPO)/$(PROJECT):latest
 ifeq ($(DOCKER_REPO),)
@@ -186,38 +180,36 @@ IMAGE_ADDR        = $(PROJECT):$(VERSION)
 IMAGE_ADDR_LATEST = $(PROJECT):latest
 endif
 
-DOCKER_BUILD     := docker build \
+DOCKER_BUILD     := docker buildx build \
+	--platform $(PLATFORM) \
 	-t $(IMAGE_ADDR) \
 	-t $(IMAGE_ADDR_LATEST) \
 	--build-arg RUN_IMAGE=$(GO_RUN_IMAGE) \
 	--build-arg BUILD_IMAGE=$(GO_BUILD_IMAGE) \
 	-f $(BUILD_DIR)/Dockerfile \
-	$(ROOT_DIR) 
-RPM_DOCKER_BUILD := docker build \
-	-t rpmbuild \
+	-o type=registry \
+	$(ROOT_DIR)
+RPM_DOCKER_BUILD := docker buildx build \
+	--platform linux/amd64 \
 	-f $(BUILD_DIR)/rpm/Dockerfile \
+	--output type=local,dest=$(OUTPUT_RPM_DIR) \
+	--build-arg VERSION=$(VERSION) \
 	--build-arg GO_IMAGE=$(GO_BASE_IMAGE) \
 	--build-arg BUILD_IMAGE=$(RPM_BUILD_IMAGE) \
-	.
-RPM_DOCKER_RUN   := docker run \
-	--rm \
-	-v $(RPM_DIR)/RPMS:$(RPMBUILD)/RPMS/ \
-	-v $(RPM_DIR)/SRPMS:$(RPMBUILD)/SRPMS/ \
-	-v $(TGZ_DIR):$(RPMBUILD)/SOURCES/ \
-	-v $(BUILD_DIR)/rpm:$(RPMBUILD)/SPECS/ \
-	$(RPM_BUILD)
-DEB_DOCKER_BUILD := docker build \
-	-t debbuild \
+	--build-arg PROJECT=$(PROJECT) \
+	$(ROOT_DIR)
+DEB_DOCKER_BUILD := docker buildx build \
+	--platform linux/amd64 \
 	-f $(BUILD_DIR)/deb/Dockerfile \
+	--output type=local,dest=$(OUTPUT_DEB_DIR) \
 	--build-arg GO_IMAGE=$(GO_BASE_IMAGE) \
-	--build-arg BUILD_DIR=$(BUILD_DIR)/deb \
+	--build-arg BUILD_DIR=$(DEB_DIR) \
 	--build-arg BUILD_IMAGE=$(DEB_BUILD_IMAGE)\
-	.
-DEB_DOCKER_RUN   := docker run \
-	--rm \
-	-e PROJECT=$(PROJECT) \
-	-e VERSION=$(VERSION) \
-	-v $(CURDIR):/data debbuild
+	--build-arg PROJECT=$(PROJECT) \
+	--build-arg VERSION=$(VERSION) \
+	--progress=plain \
+	--no-cache \
+	$(ROOT_DIR)
 
 # 颜色
 RED    := $(shell tput -Txterm setaf 1)
