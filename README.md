@@ -3,13 +3,42 @@
 > 无极生太极，太极生两仪。。。
 > 一个go脚手架,目的是能够编译出多平台的二进制,镜像,rpm,debu,等格式的软件包，自动生成版本且保持一致
 
-## 安装使用
+## 安装
 
+* 使用go安装
+
+```shell
+go install github.com/naturelr/taiji
+```
+
+* 源码安装
+
+```shell
+git clone github.com/naturelr/taiji
+cd taiji
+make build
+make install
+```
+
+## 使用
+
+```shell
 cd <项目目录>
+```
+
+`<文件类型>`不写则生成所有文件
+
 GOPATH 下:
+
+```shell
 taiji init <文件类型>
+```
+
 非GOPATH 下:
+
+```shell
 taiji init <文件类型> --mod=<模块名字>
+```
 
 ## 文件说明
 
@@ -76,7 +105,3 @@ graph LR
     dockerfile-->source[源码包]
     dockerfile-->dockerimage[docker镜像]
 ```
-
-## TODO
-
-* 多平台支持,本地直接生成已经是实现，docker，rpm,deb考虑通过buildkit实现
