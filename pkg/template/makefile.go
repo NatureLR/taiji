@@ -170,6 +170,9 @@ GO_BASE_IMAGE    ?= golang:$(GOVERSION)
 RPM_BUILD_IMAGE  ?= rockylinux:9
 DEB_BUILD_IMAGE  ?= debian:trixie
 PLATFORM         ?= linux/amd64,linux/arm64
+DOCKER_PLATFORM  ?= $(PLATFORM)
+RPM_PLATFORM     ?= $(PLATFORM)
+DEB_PLATFORM     ?= $(PLATFORM)
 
 # 自己的仓库
 DOCKER_REPO       = naturelr
@@ -181,7 +184,7 @@ IMAGE_ADDR_LATEST = $(PROJECT):latest
 endif
 
 DOCKER_BUILD     := docker buildx build \
-	--platform $(PLATFORM) \
+	--platform $(DOCKER_PLATFORM) \
 	-t $(IMAGE_ADDR) \
 	-t $(IMAGE_ADDR_LATEST) \
 	--build-arg RUN_IMAGE=$(GO_RUN_IMAGE) \
@@ -190,7 +193,7 @@ DOCKER_BUILD     := docker buildx build \
 	-o type=registry \
 	$(ROOT_DIR)
 RPM_DOCKER_BUILD := docker buildx build \
-	--platform linux/amd64 \
+	--platform $(RPM_PLATFORM) \
 	-f $(BUILD_DIR)/rpm/Dockerfile \
 	--output type=local,dest=$(OUTPUT_RPM_DIR) \
 	--build-arg VERSION=$(VERSION) \
@@ -199,7 +202,7 @@ RPM_DOCKER_BUILD := docker buildx build \
 	--build-arg PROJECT=$(PROJECT) \
 	$(ROOT_DIR)
 DEB_DOCKER_BUILD := docker buildx build \
-	--platform linux/amd64 \
+	--platform $(DEB_PLATFORM) \
 	-f $(BUILD_DIR)/deb/Dockerfile \
 	--output type=local,dest=$(OUTPUT_DEB_DIR) \
 	--build-arg GO_IMAGE=$(GO_BASE_IMAGE) \
