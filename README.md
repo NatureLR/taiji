@@ -94,14 +94,41 @@ artifacts
 ## 关系图
 
 ```mermaid
-graph LR
-    action[github action] --> makefile
-    gitlab-ci[gitlab ci] --> makefile
-    cli[命令行] --> makefile
-    makefile-->dockerfile
-    makefile-->bin[二进制]
-    dockerfile-->rpm
-    dockerfile-->deb
-    dockerfile-->source[源码包]
-    dockerfile-->dockerimage[docker镜像]
+flowchart LR
+    subgraph Trigger[触发方式]
+        A([GitHub Actions])
+        B([GitLab CI])
+        C([命令行 CLI])
+    end
+
+    subgraph Build[构建流程]
+        D[Makefile]
+        E[Dockerfile]
+    end
+
+    subgraph Output[构建产物]
+        F[[二进制]]
+        G[[RPM 包]]
+        H[[DEB 包]]
+        I[[源码包]]
+        J[[Docker 镜像]]
+    end
+
+    A --> D
+    B --> D
+    C --> D
+    D --> E
+    D --> F
+    E --> G
+    E --> H
+    E --> I
+    E --> J
+
+    classDef trigger fill:#EAF2FF,stroke:#4C84FF,color:#1F3A8A,stroke-width:1.5px;
+    classDef build fill:#EAFBF1,stroke:#34A853,color:#166534,stroke-width:1.5px;
+    classDef output fill:#FFF4E5,stroke:#FB8C00,color:#9A3412,stroke-width:1.5px;
+
+    class A,B,C trigger;
+    class D,E build;
+    class F,G,H,I,J output;
 ```
