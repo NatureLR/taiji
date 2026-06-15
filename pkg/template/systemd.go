@@ -14,8 +14,7 @@ func init() {
 }
 
 // Systemd 模板
-const Systemd = `
-# 启动顺序与依赖关系
+const Systemd = `# 启动顺序与依赖关系
 [Unit]
 # 简单的描述
 Description={{.ShortDescribe}}
