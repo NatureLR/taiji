@@ -106,23 +106,28 @@ OSS     := linux windows darwin
 ZERO_TAG     := v0.0.0
 DIRTY        ?=dev
 # 距离最近的tag的提交数量
-SINCE_TAG    := $(shell echo $(shell git rev-list $(shell git describe --tags --abbrev=0)..HEAD --count))
+SINCE_TAG := $(shell TAG=$$(git describe --tags --abbrev=0 2>/dev/null); \
+    if git rev-parse HEAD >/dev/null 2>&1; then \
+        [ -n "$$TAG" ] && git rev-list $$TAG..HEAD --count || git rev-list HEAD --count; \
+    else \
+        echo 0; \
+    fi)
 # 总的commit数量
 COUNT_COMMIT := $(shell git log --oneline |wc -l)
 # 最近的commit hash
 COMMIT_HASH  := $(shell git log -n1 --pretty=format:%h)
 COUNT_TAG	 := $(shell git tag --list |wc -l)
-# 最近的tag
-LAST_TAG     =  $(shell git describe --tags --always --dirty=-$(DIRTY))
+# 最近的tag,如果不是git仓库活着一个tag都没有则返回空
+LAST_TAG     := $(shell git rev-parse --is-inside-work-tree >/dev/null 2>&1 && git describe --tags --always --dirty=-$(DIRTY) 2>/dev/null || echo "")
 # 如果一个tag都没有则使用默认的tag
 ifeq ($(strip $(COUNT_TAG)),0)
-LAST_TAG     =  $(shell echo "$(ZERO_TAG)-$(DIRTY)")
+LAST_TAG     :=  $(shell echo "$(ZERO_TAG)-$(DIRTY)")
 endif
-AUTO_VERSION =  $(shell echo "$(LAST_TAG).$(SINCE_TAG).$(COUNT_COMMIT).$(COMMIT_HASH)" | sed 's/ //g')
-VERSION      =  $(AUTO_VERSION)
-TAG          =  $(shell git log -n1 --pretty=format:%h |git tag --contains)
+AUTO_VERSION :=  $(shell echo "$(LAST_TAG).$(SINCE_TAG).$(COUNT_COMMIT).$(COMMIT_HASH)" | sed 's/ //g')
+VERSION      :=  $(AUTO_VERSION)
+TAG          :=  $(shell git log -n1 --pretty=format:%h |git tag --contains)
 ifneq ($(TAG),)
-VERSION      =  $(shell git tag --sort=committerdate |tail -1)
+VERSION      :=  $(shell git tag --sort=committerdate |tail -1)
 endif
 
 # go 参数
@@ -175,12 +180,12 @@ RPM_PLATFORM     ?= $(PLATFORM)
 DEB_PLATFORM     ?= $(PLATFORM)
 
 # 自己的仓库
-DOCKER_REPO       = naturelr
-IMAGE_ADDR        = $(DOCKER_REPO)/$(PROJECT):$(VERSION)
-IMAGE_ADDR_LATEST = $(DOCKER_REPO)/$(PROJECT):latest
+DOCKER_REPO       := naturelr
+IMAGE_ADDR        := $(DOCKER_REPO)/$(PROJECT):$(VERSION)
+IMAGE_ADDR_LATEST := $(DOCKER_REPO)/$(PROJECT):latest
 ifeq ($(DOCKER_REPO),)
-IMAGE_ADDR        = $(PROJECT):$(VERSION)
-IMAGE_ADDR_LATEST = $(PROJECT):latest
+IMAGE_ADDR        := $(PROJECT):$(VERSION)
+IMAGE_ADDR_LATEST := $(PROJECT):latest
 endif
 
 DOCKER_BUILD     := docker buildx build \
