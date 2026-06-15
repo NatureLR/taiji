@@ -7,8 +7,7 @@ func init() {
 }
 
 // Version cmd/version.go模板
-const Version = `
-package cmd
+const Version = `package cmd
 
 import (
 	"{{.importPath}}/pkg/versions"
@@ -29,8 +28,7 @@ func init() {
 `
 
 // LibVersion cmd/version.go模板
-const LibVersion = `
-package versions
+const LibVersion = `package versions
 
 import (
 	"fmt"
@@ -82,8 +80,7 @@ var Default *Info
 `
 
 // Description 版本描述
-const Description = `
-package versions
+const Description = `package versions
 
 // ShortDescribe 简单的描述
 var ShortDescribe = "用于创建GO项目的脚手架"

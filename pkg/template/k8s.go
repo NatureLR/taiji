@@ -5,8 +5,7 @@ func init() {
 }
 
 // K8s 文件模板
-const K8s = `
-apiVersion: apps/v1
+const K8s = `apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: {{.project}}
