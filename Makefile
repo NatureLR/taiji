@@ -26,7 +26,13 @@ LDFLAG = "-s -w $(VERSION) $(GO_VERSION) $(GIT_COMMIT) $(BUILT)"
 PROJECT = taiji
 # 二进制文件生成目录
 BIN_DIR = bin
-BUILD = go build -ldflags $(LDFLAG) -o $(BIN_DIR)/$(PROJECT) .
+
+GO_OUTPUT:= $(BIN_DIR)/$(PROJECT)
+ifeq ($(GOOS),windows)
+GO_OUTPUT:= $(BIN_DIR)/$(PROJECT).exe
+endif
+
+BUILD = go build -ldflags $(LDFLAG) -o $(GO_OUTPUT) .
 
 .PHONY: build
 build: ## 编译为当前系统的二进制文件
@@ -38,7 +44,7 @@ run: ## 直接运行不编译
 
 .PHONY: install
 install: ## 安装二进制文件到系统path
-	@chmod +x $(BIN_DIR)/$(PROJECT) && mv $(BIN_DIR)/$(PROJECT) /usr/local/bin
+	@chmod +x $(GO_OUTPUT) && mv $(GO_OUTPUT) /usr/local/bin
 
 .PHONY: clean
 clean: ## 清理
