@@ -27,9 +27,10 @@ PROJECT = taiji
 # 二进制文件生成目录
 BIN_DIR = bin
 
-GO_OUTPUT:= $(BIN_DIR)/$(PROJECT)
+GO_OUTPUT    := $(BIN_DIR)/$(PROJECT)-$(GOOS)-$(GOARCH)
 ifeq ($(GOOS),windows)
-GO_OUTPUT:= $(BIN_DIR)/$(PROJECT).exe
+GO_OUTPUT    := $(BIN_DIR)/$(PROJECT)-$(GOOS)-$(GOARCH).exe
+endif
 endif
 
 BUILD = go build -ldflags $(LDFLAG) -o $(GO_OUTPUT) .
