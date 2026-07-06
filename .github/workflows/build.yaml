@@ -1,18 +1,25 @@
-name: Build Go Program for Multiple Platforms
+name: Build and Release
 
 on:
   push:
     tags:
-      - 'v*' # 仅在推送标签时触发
+      - 'v*' # 推送 v 开头的标签时触发构建并发布 release
     branches:
-      - dev
+      - dev  # dev 分支只构建，不发布
+  workflow_dispatch: # 允许手动触发
+
+permissions:
+  contents: write # 创建 release 需要写权限
+
 env:
   OUTPUT_NAME: taiji
-  
+
 jobs:
   build:
+    name: Build ${{ matrix.os }}/${{ matrix.arch }}
     runs-on: ubuntu-latest
     strategy:
+      fail-fast: false
       matrix:
         os: [linux, windows, darwin] # 支持的操作系统
         arch: [amd64, arm64]         # 支持的架构
@@ -22,7 +29,9 @@ jobs:
     steps:
       # Step 1: 检出代码
       - name: Checkout code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
 
       # Step 2: 设置 Go 环境
       - name: Setup Go
@@ -36,18 +45,48 @@ jobs:
           GOOS: ${{ matrix.os }}
           GOARCH: ${{ matrix.arch }}
         run: |
-          mkdir -p dist
-          output_name=${{ env.OUTPUT_NAME }}-${{ matrix.os }}-${{ matrix.arch }}
-          if [ "${{ matrix.os }}" == "windows" ]; then
-            output_name="$output_name.exe"
-          fi
-          echo "Building $output_name for $GOOS/$GOARCH..."
-          #go build -o dist/$output_name . # 替换为你的主程序路径
           make
 
-      # Step 4: 上传所有构建产物
+      # Step 4: 上传构建产物
       - name: Upload Binaries ${{ matrix.os }}/${{ matrix.arch }}
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
-          name:  ${{ env.OUTPUT_NAME }}-${{ matrix.os }}-${{ matrix.arch }}
-          path: bin/
+          name: ${{ env.OUTPUT_NAME }}-${{ matrix.os }}-${{ matrix.arch }}
+          path: bin/*
+          if-no-files-found: error
+
+  release:
+    name: Publish release
+    needs: build
+    if: startsWith(github.ref, 'refs/tags/v')
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7
+
+      # 下载所有构建产物到 dist 目录（每个 artifact 一个子目录）
+      - name: Download package artifacts
+        uses: actions/download-artifact@v7
+        with:
+          path: dist
+          merge-multiple: true
+
+      - name: List assets
+        run: ls -lhR dist
+
+      # 创建 release（若不存在）并上传所有软件包
+      - name: Publish GitHub release
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          TAG_NAME: ${{ github.ref_name }}
+        run: |
+          set -euo pipefail
+
+          if ! gh release view "$TAG_NAME" >/dev/null 2>&1; then
+            gh release create "$TAG_NAME" \
+              --title "$TAG_NAME" \
+              --generate-notes \
+              --verify-tag
+          fi
+
+          gh release upload "$TAG_NAME" dist/* --clobber
