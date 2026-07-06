@@ -53,8 +53,7 @@ COPY --from=builder /root/*deb .
 
 `
 
-const DEBCONTROL = `
-Section: unknown
+const DEBCONTROL = `Section: unknown
 Priority: optional
 Maintainer: youname <youemail.com>
 Build-Depends: go
