@@ -27,6 +27,9 @@ PROJECT = taiji
 # 二进制文件生成目录
 BIN_DIR = bin
 
+GOOS       ?= $(shell go env GOOS)
+GOARCH     ?= $(shell go env GOARCH)
+
 GO_OUTPUT:= $(BIN_DIR)/$(PROJECT)-$(GOOS)-$(GOARCH)
 ifeq ($(GOOS),windows)
 GO_OUTPUT:= $(BIN_DIR)/$(PROJECT)-$(GOOS)-$(GOARCH).exe
@@ -44,7 +47,7 @@ run: ## 直接运行不编译
 
 .PHONY: install
 install: ## 安装二进制文件到系统path
-	@chmod +x $(GO_OUTPUT) && mv $(GO_OUTPUT) /usr/local/bin
+	@chmod +x $(GO_OUTPUT) && mv $(GO_OUTPUT) /usr/local/bin/$(PROJECT)
 
 .PHONY: clean
 clean: ## 清理
