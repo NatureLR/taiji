@@ -79,10 +79,10 @@ func initConfig() {
 		}
 		viper.SetConfigName("config")
 		viper.SetConfigType("yaml")
-		viper.AddConfigPath(".")                                         //当前目录
+		viper.AddConfigPath(".")                                         // 当前目录
 		viper.AddConfigPath("config")
-		viper.AddConfigPath(userConfigDir)                               //用户配置目录
-		viper.AddConfigPath(fmt.Sprint(filepath.Join("/", "etc", self))) //etc目录下程序的名字下的config.yaml
+		viper.AddConfigPath(userConfigDir)                               // 用户配置目录
+		viper.AddConfigPath(fmt.Sprint(filepath.Join("/", "etc", self))) // etc目录下程序的名字下的config.yaml
 	}
 
 	// 读取环境环境变量以为程序名字大写开头
