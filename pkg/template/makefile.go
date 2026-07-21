@@ -51,6 +51,7 @@ build-all: ## 多平台多架构
 build-in-docker: ## 在docker里的编译选项
 	@CGO_ENABLED=0 go build -ldflags $(LDFLAG) -o $(PROJECT) $(ROOT_DIR)
 
+.PHONY: all
 all: build-all docker tgz rpm deb ## 编译打包所有
 
 ##@ Deploy
