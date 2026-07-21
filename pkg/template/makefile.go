@@ -51,6 +51,7 @@ build-all: ## 多平台多架构
 build-in-docker: ## 在docker里的编译选项
 	@CGO_ENABLED=0 go build -ldflags $(LDFLAG) -o $(PROJECT) $(ROOT_DIR)
 
+.PHONY: all
 all: build-all docker tgz rpm deb ## 编译打包所有
 
 ##@ Deploy
@@ -133,9 +134,8 @@ endif
 # go 参数
 GOOS       ?= $(shell go env GOOS)
 GOARCH     ?= $(shell go env GOARCH)
-# 使用本地go版本作为go版本
-# GOVERSION  ?= $(shell go version | grep -Eo '[0-9]+\.[0-9]+\.[0-9]+')
-GOVERSION  ?= {{.GoVersion}}
+# 从项目的 go.mod 中读取 go 版本
+GOVERSION  ?= $(shell awk '/^go / {print $$2; exit}' $(ROOT_DIR)/go.mod)
 
 # 目录
 ROOT_DIR          := $(realpath $(CURDIR))

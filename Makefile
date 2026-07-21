@@ -25,7 +25,8 @@ LDFLAG = "-s -w $(VERSION) $(GO_VERSION) $(GIT_COMMIT) $(BUILT)"
 
 PROJECT = taiji
 # 二进制文件生成目录
-BIN_DIR = bin
+ROOT_DIR := $(realpath $(CURDIR))
+BIN_DIR   = $(ROOT_DIR)/bin
 
 GOOS       ?= $(shell go env GOOS)
 GOARCH     ?= $(shell go env GOARCH)
@@ -82,3 +83,6 @@ arm: ## 交叉编译为arm的linux环境（树莓派等环境）二进制文件
 help: ## 显示make的目标
 	@awk 'BEGIN {FS = ":.*?## "} /^[a-zA-Z_-]+:.*?## / {sub("\\\\n",sprintf("\n%22c"," "), $$2);printf " \033[36m%-20s\033[0m  %s\n", $$1, $$2}' $(MAKEFILE_LIST)
 
+.PHONY: test
+test: build ## 测试
+	@sh test.sh
