@@ -21,6 +21,7 @@ func main() {
 const RootGo = `package cmd
 
 import (
+	"flag"
 	"fmt"
 	"os"
 	"path/filepath"
@@ -55,6 +56,11 @@ func Execute() {
 }
 
 func init() {
+	// 将 klog 的 falg 添加到 cobra 中
+	fs := flag.NewFlagSet("", flag.PanicOnError)
+	klog.InitFlags(fs)
+	rootCmd.Flags().AddGoFlagSet(fs)
+
 	cobra.OnInitialize(initConfig)
 
 	// 在这里，您将定义标志和配置设置。Cobra支持持久性标志，如果在这里定义的话，这里的配置是全局的。
