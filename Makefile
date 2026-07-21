@@ -9,12 +9,12 @@ RESET  := $(shell tput -Txterm sgr0)
 
 # 判断当前commit是否有tag如果有tag则显示tag没有则显示 commit次数.哈希
 VER = $(shell echo "$(shell git log --oneline |wc -l).$(shell git log -n1 --pretty=format:%h)" | sed 's/ //g')
-# 用于判断当前的提前是否有tag
+# 用于判断当前的提交是否有tag
 TAG = $(shell git log -n1 --pretty=format:%h |git tag --contains)
 # 如果没有手动指定标签就使用自动生成的标签
 ifneq ($(TAG),)
 # 通过git tag命令指定的标签
-VER = $(shell git tag --sort=committerdate |tail -1)
+VER = $(shell git describe --tags)
 endif
 
 VERSION =  -X '$(GO_PATH)/pkg/versions.xVersion=$(VER)'
