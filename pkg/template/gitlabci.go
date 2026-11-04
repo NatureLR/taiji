@@ -42,6 +42,7 @@ image:
   only:
     - tags
     - master
+    - main
     - dev
     
   # 要用到的镜像dokcer in docker
